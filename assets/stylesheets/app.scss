@@ -1,0 +1,97 @@
+@import "bootstrap";
+
+// Custom CSS here:
+
+.csl-entry, .csl-block {
+	display: inline;
+}
+
+ul#DocumentsView {
+	list-style: none;
+	li {
+		font-size: $font-size-h4;
+		margin-top: $font-size-h4;
+	}
+}
+
+#document-author {
+	font-weight: 400;
+	margin-top: $line-height-computed / 2;
+	margin-left: $line-height-computed;
+}
+
+.document-metadata {
+	margin-top: $line-height-computed * 3;
+	margin-bottom: $line-height-computed * 2;
+	margin-left: $line-height-computed * 3;
+}
+
+.center-block {
+	float: none;
+}
+
+.sidebar {
+	@extend .navbar, .navbar-default, .hidden-sm, .hidden-xs;
+	&.affix {
+		z-index: 5000;
+		position: fixed !important;
+		top: 0;
+	}
+}
+
+@mixin affix-sidebar($columns) {
+	//@include make-md-column($columns);
+	.container &.affix {
+		@media (min-width: $screen-md-min) {
+			width: $container-md * ($columns / $grid-columns);
+			margin-left: $container-md * (($grid-columns - $columns) / $grid-columns);
+		}
+		@media (min-width: $screen-lg-min) {
+			width: $container-lg * ($columns / $grid-columns);
+			margin-left: $container-lg * (($grid-columns - $columns) / $grid-columns);
+		}
+	}
+	.container-fluid &.affix {
+		@media (min-width: $screen-md-min) {
+			width: percentage($columns / $grid-columns);
+			margin-left: percentage(($grid-columns - $columns) / $grid-columns);
+		}
+		@media (min-width: $screen-lg-min) {
+			width: percentage($columns / $grid-columns);
+			margin-left: percentage(($grid-columns - $columns) / $grid-columns);
+		}
+	}
+}
+
+@for $i from 1 through $grid-columns {
+	.sidebar.col-md-#{$i} {
+		@include affix-sidebar($i);
+	}
+}
+
+footer {
+	@extend .navbar, .navbar-inverse;
+	margin-bottom: 0 !important;
+}
+
+body {
+	overflow: hidden;
+}
+
+body.loaded {
+	overflow: auto;
+}
+
+#loading {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: $gray-lighter;
+	padding-top: 30vh;
+	text-shadow: 1px 1px 0 white;
+	i {
+		font-size: 14rem;
+	}
+}

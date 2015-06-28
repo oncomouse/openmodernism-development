@@ -1,0 +1,46 @@
+
+!!! 5
+-# paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+<!--[if lt IE 7]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7]>	  <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8]>	  <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if gt IE 8]><!-->
+%html.no-js{ :lang => "en" }
+	<!--<![endif]-->
+	%head
+		%meta{ :charset => "utf-8" }/
+		
+		-# Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		-# Remove this if you use the .htaccess
+		-# %meta{ "http-equiv" => "X-UA-Compatible", :content => "IE=edge,chrome=1" }/
+
+		= title_tag
+		%meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }/
+		
+		/ Load Fonts:
+		%link{:href => "//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", :media => "all", :rel => "stylesheet"	}
+		/ Load Bootstrap (custom local build) and local styles:
+		= css :app
+		
+		/ HTML5 shim, CSS3-Mediaqueries, and Respond.js IE8 support of HTML5 elements and media queries
+		<!--[if lt IE 9]>
+		= js :polyfill
+		<![endif]-->
+		-#- if settings.development?
+		-#	%script{ :src => '/vendor/jquery/dist/jquery.js'}
+		= js :require
+		-# %script{ :src => '/vendor/requirejs/require.js', 'data-main' => '/javascripts/main' }
+	%body
+		%header.container{ :role => 'banner'}
+			= haml :"partials/nav"
+		%article.container{ :role => 'main'}
+			= yield
+		%footer.container{ :role => 'complementary'}
+		#loading.text-center
+			%h1 Loading <br> Open Modernism
+			%h2 Please Wait a Moment
+			%p
+				%i.fa.fa-spin.fa-spinner
+		-#%script{ :src => '/javascripts/jst.js' }
+		-#= js :app
+		

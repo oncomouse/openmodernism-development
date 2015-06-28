@@ -1,0 +1,7 @@
+Gemfile.lock
+public/javascripts
+public/vendor
+public/build.txt
+assets/vendor
+.sass-cache
+.DS_Store

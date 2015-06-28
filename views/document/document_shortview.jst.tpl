@@ -1,0 +1,1 @@
+<a href="#/document/<%= model.id %>"><%= model.get('metadata').to_s() %></a>
