@@ -1,7 +1,7 @@
 ({
 	'appDir': './assets',
 	'baseUrl': 'javascripts',
-	'dir': './assets-build',
+	'dir': './public',
 	'paths': {
 		'backbone': '../vendor/backbone/backbone',
 		'bootstrap': '../vendor/bootstrap-sass-official/assets/javascripts/bootstrap',
@@ -20,10 +20,6 @@
 			'underscore': 'lodash'
 		}
 	},
-	'modules': [
-		{
-			'name': 'main'
-		}
-	],
+
 	'skipDirOptimize': false
 })

@@ -2,10 +2,7 @@ require 'json'
 require 'cgi'
 
 require 'sinatra/base'
-require 'sinatra/assetpack'
 require 'sinatra/head'
-require 'sinatra/backbone'
-require 'sinatra/support'
 
 require 'data_mapper'
 require 'dm-migrations'
@@ -36,8 +33,6 @@ class App < Sinatra::Base
 	
 	register Sinatra::Head
 
-	register Sinatra::JstPages
-	serve_jst '/javascripts/jst.js'
 	#register Sinatra::RestAPI
 	
 	set :haml, :format => :html5

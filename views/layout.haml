@@ -28,8 +28,10 @@
 		<![endif]-->
 		-#- if settings.development?
 		-#	%script{ :src => '/vendor/jquery/dist/jquery.js'}
-		= js :require
-		-# %script{ :src => '/vendor/requirejs/require.js', 'data-main' => '/javascripts/main' }
+		- if settings.development?
+			= js :require
+		- else
+			%script{ :src => '/vendor/requirejs/require.js', 'data-main' => '/javascripts/main' }
 	%body
 		%header.container{ :role => 'banner'}
 			= haml :"partials/nav"

@@ -7,6 +7,9 @@ require 'dm-migrations'
 
 require 'json'
 
+require 'sshkit'
+require 'sshkit/dsl'
+
 desc "auto migrates the database"
 task :migrate do
   require "./#{APP_FILE}"
@@ -19,12 +22,26 @@ task :upgrade do
   DataMapper.auto_upgrade! 
 end
 
+task :deploy => "assets:pack" do
+	puts "Running task :deploy"
+	on "eschaton@dynamo.dreamhost.com" do
+		Dir.glob('*').select{|i| !(/^assets\//.match(i)) }.select{ |i| !(/^[A-Z][a-z]+file/.match(i)) }.each do |file|
+			upload! file, '/home/eschaton/www/openmodernism.pilsch.com/current', :recursive => true
+		end
+	end
+	# Keep the development server free of compiled resources:
+	system("rm -r public/*")
+end
+
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst"] do
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:compile_css"]
+	task :run_r_js do
+		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
 	end
 	task :clean_copy do
+		puts "Running task assets:clean_copy"
 		Dir.mkdir('assets-clean_copy') if not Dir.exists? 'assets-clean_copy'
 		Dir.mkdir('assets-clean_copy/vendor/') if not Dir.exists? 'assets-clean_copy/vendor'
 		
@@ -51,6 +68,7 @@ namespace :assets do
 		system("cp -r assets/javascripts assets-clean_copy/")
 	end
 	task :build_jst do 
+		puts "Running task assets:build_jst"
 		File.open("assets-clean_copy/javascripts/jst.js", "w") do |jst|
 			jst.write("(function(){var c = {};if (!window.JST) window.JST = {};")
 			Dir.glob("views/**/*.jst.*").each do |template|
@@ -62,5 +80,15 @@ namespace :assets do
 			end
 			jst.write("})();")
 		end
+	end
+	task :compile_css do
+		puts "Running task assets:compile_css"
+		compiled_css = [
+			'app.css'
+		]
+		system("mkdir -p public/stylesheets")
+		compiled_css.each{ |file| File.unlink("public/stylesheets/#{file}") if File.exists? file }
+		puts "Running Compass:"
+		system("bundle exec compass compile -c compass.config.rb")
 	end
 end
