@@ -7,8 +7,11 @@ require 'dm-migrations'
 
 require 'json'
 
-require 'sshkit'
-require 'sshkit/dsl'
+#require 'sshkit'
+#require 'sshkit/dsl'
+
+#require 'mina'
+#require 'mina/rsync'
 
 desc "auto migrates the database"
 task :migrate do
@@ -24,11 +27,12 @@ end
 
 task :deploy => "assets:pack" do
 	puts "Running task :deploy"
-	on "eschaton@dynamo.dreamhost.com" do
-		Dir.glob('*').select{|i| !(/^assets\//.match(i)) }.select{ |i| !(/^[A-Z][a-z]+file/.match(i)) }.each do |file|
-			upload! file, '/home/eschaton/www/openmodernism.pilsch.com/current', :recursive => true
-		end
-	end
+	#on "eschaton@dynamo.dreamhost.com" do
+	#	Dir.glob('*').select{|i| !(/^assets\//.match(i)) }.select{ |i| !(/^[A-Z][a-z]+file/.match(i)) }.each do |file|
+	#		upload! file, '/home/eschaton/www/openmodernism.pilsch.com/current', :recursive => true
+	#	end
+	#end
+	system("rsync --verbose  --progress --stats --compress --rsh=/usr/bin/ssh --recursive --delete --delete-excluded  --exclude '.git*'  --exclude '.sass-cache' --include 'bootstrap-sass-official/assets' --exclude 'assets' --exclude 'application/asset_definitions' --exclude 'Gemfile*' * eschaton@copland.dreamhost.com:/home/eschaton/www/openmodernism.pilsch.com/current")
 	# Keep the development server free of compiled resources:
 	system("rm -r public/*")
 end
@@ -60,7 +64,7 @@ namespace :assets do
 				end
 				if Dir.exists? "assets/#{file}"
 					system("mkdir -p assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
-					system("cp -r #{"assets/#{file}"} assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
+					system("cp -r #{"assets/#{file}"}/* assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
 				end
 			end
 		end

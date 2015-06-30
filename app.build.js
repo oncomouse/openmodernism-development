@@ -3,6 +3,7 @@
 	'baseUrl': 'javascripts',
 	'dir': './public',
 	'paths': {
+		'require': '../vendor/requirejs/require',
 		'backbone': '../vendor/backbone/backbone',
 		'bootstrap': '../vendor/bootstrap-sass-official/assets/javascripts/bootstrap',
 		'citeproc': 'vendor/citeproc-amd',
@@ -20,6 +21,5 @@
 			'underscore': 'lodash'
 		}
 	},
-
 	'skipDirOptimize': false
 })

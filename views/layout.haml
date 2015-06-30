@@ -20,11 +20,18 @@
 		/ Load Fonts:
 		%link{:href => "//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", :media => "all", :rel => "stylesheet"	}
 		/ Load Bootstrap (custom local build) and local styles:
-		= css :app
+		-if settings.development?
+			= css :app
+		- else
+			%link{:href=>'/stylesheets/app.css', :media => "all", :rel => "stylesheet" }
 		
 		/ HTML5 shim, CSS3-Mediaqueries, and Respond.js IE8 support of HTML5 elements and media queries
 		<!--[if lt IE 9]>
-		= js :polyfill
+		-if settings.development?
+			= js :polyfill
+		- else
+			%script{ :src => '//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js' }
+			%script{ :src => '//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js' }
 		<![endif]-->
 		-#- if settings.development?
 		-#	%script{ :src => '/vendor/jquery/dist/jquery.js'}

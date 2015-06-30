@@ -6,3 +6,4 @@ assets/vendor
 .sass-cache
 .DS_Store
 assets-clean_copy
+Gemfile.lock

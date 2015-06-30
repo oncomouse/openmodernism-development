@@ -14,9 +14,13 @@ gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-types'
 
+gem 'mina', :group => [:development, :test]
+gem 'mina-rsync', :group => [:development, :test]
+gem 'highline', :group => [:development, :test]
+
 gem 'shotgun', :group => [:development, :test]
 
 gem 'dm-sqlite-adapter'#, :group => [:development, :test]
-gem 'dm-mysql-adapter'#, :group => :production
+#gem 'dm-mysql-adapter', :group => :production
 
 #gem 'puma', :group => [:development, :test]

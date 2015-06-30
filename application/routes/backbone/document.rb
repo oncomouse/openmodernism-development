@@ -14,7 +14,7 @@ class App < Sinatra::Base
 	post '/document' do
 		body = JSON.parse request.body.read
 		document = Document.create(
-			metadata: body['metadata']
+			:metadata => body['metadata']
 		)
 		status 201
 		document.to_json
@@ -29,7 +29,7 @@ class App < Sinatra::Base
 		body = JSON.parse request.body.read
 		document ||= Document.get(params[:id]) || halt(404)
 		halt 500 unless document.update(
-			metadata: body['metadata']
+			:metadata => body['metadata']
 		)
 		document.to_json
 	end
