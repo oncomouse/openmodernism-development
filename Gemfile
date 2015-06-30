@@ -14,9 +14,7 @@ gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-types'
 
-gem 'mina', :group => [:development, :test]
-gem 'mina-rsync', :group => [:development, :test]
-gem 'highline', :group => [:development, :test]
+gem 'sshkit'
 
 gem 'shotgun', :group => [:development, :test]
 

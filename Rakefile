@@ -7,11 +7,8 @@ require 'dm-migrations'
 
 require 'json'
 
-#require 'sshkit'
-#require 'sshkit/dsl'
-
-#require 'mina'
-#require 'mina/rsync'
+require 'sshkit'
+require 'sshkit/dsl'
 
 desc "auto migrates the database"
 task :migrate do
@@ -32,7 +29,28 @@ task :deploy => "assets:pack" do
 	#		upload! file, '/home/eschaton/www/openmodernism.pilsch.com/current', :recursive => true
 	#	end
 	#end
-	system("rsync --verbose  --progress --stats --compress --rsh=/usr/bin/ssh --recursive --delete --delete-excluded  --exclude '.git*'  --exclude '.sass-cache' --include 'bootstrap-sass-official/assets' --exclude 'assets' --exclude 'application/asset_definitions' --exclude 'Gemfile*' * eschaton@copland.dreamhost.com:/home/eschaton/www/openmodernism.pilsch.com/current")
+	#system("rsync --verbose  --progress --stats --compress --rsh=/usr/bin/ssh --recursive --delete --delete-excluded  --exclude '.git*'  --exclude '.sass-cache' --include 'bootstrap-sass-official/assets' --exclude 'assets' --exclude 'application/asset_definitions' --exclude 'Gemfile*' * eschaton@copland.dreamhost.com:/home/eschaton/www/openmodernism.pilsch.com/current")
+
+	excludes = [
+		/^assets\//,
+		/[A-Z][a-z]+file/,
+		/application\/asset_definitions/,
+		/compass\.config\.rb/,
+		/app\.build\.js/,
+		/ui\/i18n/,
+		/ui\/minified/
+	]
+	on 'eschaton@copland.dreamhost.com' do
+		within "/home/eschaton/www/openmodernism.pilsch.com/current" do
+			Dir.glob('**/*.*').each do |file|
+				next if excludes.collect{|x| !x.match(file).nil? }.include? true
+				execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
+				upload! file, "/home/eschaton/www/openmodernism.pilsch.com/current/#{File.dirname(file)}"
+			end
+			# Tell Phusion Passenger it needs to restart:
+			execute :touch, 'tmp/restart.txt'
+		end
+	end
 	# Keep the development server free of compiled resources:
 	system("rm -r public/*")
 end
