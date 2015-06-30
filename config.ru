@@ -4,11 +4,11 @@ if ENV['RACK_ENV'] == 'production'
 	require 'rubygems'
 	Gem.clear_paths
 	require 'sinatra'
+	
+	FileUtils.mkdir_p 'log' unless File.exists?('log')
+	log = File.new("log/sinatra.log", "a")
+	$stderr.reopen(log)
 end
-
-FileUtils.mkdir_p 'log' unless File.exists?('log')
-log = File.new("log/sinatra.log", "a")
-$stderr.reopen(log)
 
 require './app'
 run App
