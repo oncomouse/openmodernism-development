@@ -34,11 +34,18 @@ task :deploy => "assets:pack" do
 		/ui\/i18n/,
 		/ui\/minified/
 	]
+	directories_made = []
+	
+	# Use SSHKit to connect to the server:
 	on 'eschaton@copland.dreamhost.com' do
 		within "/home/eschaton/www/openmodernism.pilsch.com/current" do
+			# Upload the files:
 			Dir.glob('**/*.*').each do |file|
 				next if excludes.collect{|x| !x.match(file).nil? }.include? true
-				execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
+				if not directories_made.include? File.dirname(file)
+					execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
+					directories_made << File.dirname(file)
+				end
 				upload! file, "/home/eschaton/www/openmodernism.pilsch.com/current/#{File.dirname(file)}"
 			end
 			# Tell Phusion Passenger it needs to restart:
