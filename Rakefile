@@ -59,30 +59,43 @@ end
 namespace :assets do
 	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:compile_css"]
 	
+	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
 		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
 	end
 	
+	# Create a copy of the assets directory that only uses the vendor packages we are actually deploying and the JS files we need:
 	task :clean_copy do
 		puts "Running task assets:clean_copy"
+		
+		# Create our copy:
 		Dir.mkdir('assets-clean_copy') if not Dir.exists? 'assets-clean_copy'
 		Dir.mkdir('assets-clean_copy/vendor/') if not Dir.exists? 'assets-clean_copy/vendor'
 		
+		# Read in the r.js build script:
 		requirejs_config = JSON.parse(IO.read('app.build.js').gsub(/^\(/,"").gsub(/\)$/,"").gsub(/\'/,"\""))
 		
+		# Grab all the vendor files from the require.js configuration:
 		required_files = requirejs_config['paths'].values.select{ |i| i =~ /^\.\.\// }
 		
+		# Parse the assets/vendor directory:
 		Dir.glob("assets/vendor/**/*").each do |file|
 			file.sub!(/^assets\//,"")
+			
+			# If file is not a JavaScript file or a directory, skip it:
 			next if not file =~ /\.js$/ and not Dir.exists? "assets/#{file}"
+			
 			file.sub!(/\.js$/, "")
+			# Do we need the file?
 			if required_files.include?("../" + file)
+				# If it's a JS file, copy it:
 				if File.exists? "assets/#{file}.js"
 					system("mkdir -p assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}")
 					system("cp #{"assets/#{file}.js"} assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}")
 				end
+				# If it's a directory, copy it's contents:
 				if Dir.exists? "assets/#{file}"
 					system("mkdir -p assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
 					system("cp -r #{"assets/#{file}"}/* assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
@@ -90,6 +103,7 @@ namespace :assets do
 			end
 		end
 		
+		# Copy over the javascripts directory:
 		system("cp -r assets/javascripts assets-clean_copy/")
 	end
 	task :build_jst do 
