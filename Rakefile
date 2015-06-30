@@ -24,13 +24,7 @@ end
 
 task :deploy => "assets:pack" do
 	puts "Running task :deploy"
-	#on "eschaton@dynamo.dreamhost.com" do
-	#	Dir.glob('*').select{|i| !(/^assets\//.match(i)) }.select{ |i| !(/^[A-Z][a-z]+file/.match(i)) }.each do |file|
-	#		upload! file, '/home/eschaton/www/openmodernism.pilsch.com/current', :recursive => true
-	#	end
-	#end
-	#system("rsync --verbose  --progress --stats --compress --rsh=/usr/bin/ssh --recursive --delete --delete-excluded  --exclude '.git*'  --exclude '.sass-cache' --include 'bootstrap-sass-official/assets' --exclude 'assets' --exclude 'application/asset_definitions' --exclude 'Gemfile*' * eschaton@copland.dreamhost.com:/home/eschaton/www/openmodernism.pilsch.com/current")
-
+	
 	excludes = [
 		/^assets\//,
 		/[A-Z][a-z]+file/,
@@ -57,11 +51,13 @@ end
 
 namespace :assets do
 	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:compile_css"]
+	
 	task :run_r_js do
 		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
 	end
+	
 	task :clean_copy do
 		puts "Running task assets:clean_copy"
 		Dir.mkdir('assets-clean_copy') if not Dir.exists? 'assets-clean_copy'
