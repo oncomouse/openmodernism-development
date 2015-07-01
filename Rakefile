@@ -27,6 +27,8 @@ task :deploy => "assets:pack" do
 	
 	excludes = [
 		/^assets\//,
+		/^public\/vendor\/(?!require)/,
+		/javascripts\/(vendor|models|collections|views|jst.js|site.js)/,
 		/[A-Z][a-z]+file/,
 		/application\/asset_definitions/,
 		/compass\.config\.rb/,
