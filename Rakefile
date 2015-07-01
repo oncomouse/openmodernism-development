@@ -109,7 +109,7 @@ namespace :assets do
 	task :build_jst do 
 		puts "Running task assets:build_jst"
 		File.open("assets-clean_copy/javascripts/jst.js", "w") do |jst|
-			jst.write("(function(){var c = {};if (!window.JST) window.JST = {};")
+			jst.write("define([], function(){var c = {}; var JST = {};")
 			Dir.glob("views/**/*.jst.*").each do |template|
 				content = IO.read(template)
 				content.gsub!("\n", "\\n")
@@ -117,7 +117,7 @@ namespace :assets do
 				template.sub!(/^views\//,"").sub!(/\.jst\.[a-z]+/,"")
 				jst.write("JST['#{template}'] = function() { if (!c['#{template}']) c['#{template}'] = (_.template(\"#{content}\")); return c['#{template}'].apply(this, arguments); };")
 			end
-			jst.write("})();")
+			jst.write("return JST });")
 		end
 	end
 	task :compile_css do
