@@ -25,26 +25,26 @@ end
 task :deploy => "assets:pack" do
 	puts "Running task :deploy"
 	
+	# List of files to skip:
 	excludes = [
-		/^assets\//,
-		/^public\/vendor\/(?!require)/,
-		/javascripts\/(vendor|models|collections|views|jst.js|site.js)/,
-		/[A-Z][a-z]+file/,
-		/application\/asset_definitions/,
-		/compass\.config\.rb/,
-		/app\.build\.js/,
-		/ui\/i18n/,
-		/ui\/minified/
+		/^assets\//, # Don't upload uncompiled assets
+		/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
+		/javascripts\/(vendor|models|collections|views|jst.js|site.js)/, # Skip all written JavaScript except the routes/
+		/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
+		/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
+		/compass\.config\.rb/, # Don't upload build files
+		/app\.build\.js/, # Don't upload build files
+		/ui\/(i18n|minified)/ # We don't need this anymore, but they match for jquery-ui files
 	]
-	directories_made = []
+	directories_made = [] # Cachce directories we create on the server
 	
 	# Use SSHKit to connect to the server:
 	on 'eschaton@copland.dreamhost.com' do
 		within "/home/eschaton/www/openmodernism.pilsch.com/current" do
 			# Upload the files:
 			Dir.glob('**/*.*').each do |file|
-				next if excludes.collect{|x| !x.match(file).nil? }.include? true
-				if not directories_made.include? File.dirname(file)
+				next if excludes.collect{|x| !x.match(file).nil? }.include? true # Exclude any files that match the exclusions
+				if not directories_made.include? File.dirname(file) # If we haven't made it, build the remote directory:
 					execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
 					directories_made << File.dirname(file)
 				end
@@ -124,9 +124,7 @@ namespace :assets do
 	end
 	task :compile_css do
 		puts "Running task assets:compile_css"
-		compiled_css = [
-			'app.css'
-		]
+		compiled_css =  Dir.glob('assets/stylesheets/**/[^_]*.scss').map{ |x| File.basename(x).gsub(/\.(?:scss|sass)/,'.css') }
 		system("mkdir -p public/stylesheets")
 		compiled_css.each{ |file| File.unlink("public/stylesheets/#{file}") if File.exists? file }
 		puts "Running Compass:"
