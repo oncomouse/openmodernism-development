@@ -36,6 +36,8 @@
 		-#- if settings.development?
 		-#	%script{ :src => '/vendor/jquery/dist/jquery.js'}
 		- if settings.development?
+			:javascript
+				window.development = true
 			= js :require
 		- else
 			%script{ :src => '/vendor/requirejs/require.js', 'data-main' => '/javascripts/main' }

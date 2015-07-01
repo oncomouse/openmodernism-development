@@ -53,7 +53,7 @@ var requirejs_configuration = {
 };
 
 (function(factory) {
-	if (typeof jQuery === 'function') {
+	if (typeof window.development !== 'undefined') {
 		// This has to do with the way sinatra/assetpack does cache busting and will only
 		// run in development mode.
 		// Basically, we process 
