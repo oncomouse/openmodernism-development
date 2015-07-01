@@ -17,7 +17,7 @@
 	var DocumentsView = Backbone.View.extend({
 		el: '#app',
 		template: JST['document/documents'],
-		render(documentList) {
+		render: function(documentList) {
 			this.$el.html(this.template());
 			this.$('#DocumentsView').html('');
 			documentList.each(function(element) {
