@@ -3,6 +3,7 @@ public/vendor
 public/stylesheets
 public/build.txt
 assets/vendor
+log
 .sass-cache
 .DS_Store
 assets-clean_copy
