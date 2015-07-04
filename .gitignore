@@ -2,6 +2,7 @@ public/javascripts
 public/vendor
 public/stylesheets
 public/build.txt
+application/auth
 assets/vendor
 log
 .sass-cache

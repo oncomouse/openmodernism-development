@@ -14,6 +14,12 @@ gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-types'
 
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-github'
+gem 'omniauth-facebook'
+gem 'omniauth-openid'
+
 gem 'sshkit'
 
 gem 'shotgun', :group => [:development, :test]

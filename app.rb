@@ -10,7 +10,27 @@ require 'dm-types'
 
 require 'haml'
 
+#require 'omniauth'
+#require 'omniauth-twitter'
+#require 'omniauth-github'
+#require 'omniauth-facebook'
+#require 'omniauth-openid'
+#require 'openid/store/filesystem'
+
+
 class App < Sinatra::Base
+#	use Rack::Session::Cookie, secret: 'The world of Oath'
+#	use OmniAuth::Builder do
+#		provider :github, 'key', 'secret' #https://github.com/settings/applications
+#		provider :twitter, ' key', 'secret' #https://dev.twitter.com/apps/new
+#		provider :open_id, :store => OpenID::Store::Filesystem.new('/tmp')
+#		provider :facebook, 'key', 'secret' #http://developers.facebook.com/docs/authentication
+#	end
+#	
+#	post '/auth/:name/callback' do
+#		auth = request.env['omniauth.auth']
+#	end
+#	
 	configure :development do
 		DataMapper::Logger.new($stdout, :debug)
 		DataMapper.setup(
