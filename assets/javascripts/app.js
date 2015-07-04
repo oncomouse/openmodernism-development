@@ -22,7 +22,8 @@ define([
 		app.routes = {
 			'': 'documents', // SET THIS TO THE DEFAULT ROUTE
 			'documents': 'documents',
-			'document/:id': 'document'
+			'document/:id': 'document',
+			'anthologies': 'anthologies'
 		};
 
 		app.clearAppCanvas = function() {
