@@ -8,18 +8,18 @@ define([
 	DocumentsView
 ) {
 	var DocumentsRoute = function(app) {
-		var new_document_list = false;
+		var fetch_collection = false;
 	
 		app.clearAppCanvas();
 	
 		if(!('documentList' in app)) {
-			new_document_list = true;
+			fetch_collection = true;
 			app.documentList = new DocumentCollection();
 		}
 		if(!('documentsView' in app)) {
 			app.documentsView = new DocumentsView();
 		}
-		if(new_document_list) {
+		if(fetch_collection) {
 			app.documentList.fetch().then(function() { 
 				$.when(app.documentsView.render(app.documentList)).done(function() {
 					app.router.trigger('ready');
