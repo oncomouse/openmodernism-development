@@ -2,15 +2,17 @@ define([
 	'jquery',
 	'lodash',
 	'backbone',
-	'views/sidebar_view',
 	'lorem',
-	'jquery-ui/effect-blind'
+	'views/sidebar_view',
+	'jquery-ui/effect-blind',
+	'bootstrap/transition',
+	'bootstrap/collapse'
 ],function(
 	$,
 	_,
 	Backbone,
-	SidebarView,
-	Lorem
+	Lorem,
+	SidebarView
 ){
 	var start = function() {
 		var DEBUG = false;
@@ -28,18 +30,7 @@ define([
 		}
 
 		var Router = Backbone.Router.extend({
-			routeReady: function() {
-				var l = new Lorem;
-				l.query = '15s';
-				l.type = Lorem.TEXT;
-				$('#app .row').append($(
-					'<div class="col-xs-12">' +
-					_.map(l.createLorem().split('. '), function(sentence) {
-						return '<p>' + sentence + '</p>';
-					}).join('') +
-					'</div>'
-				));
-				
+			routeReady: function() {				
 				$('body').addClass('loaded');
 				$('#loading').hide('blind', {}, 500);
 			},
