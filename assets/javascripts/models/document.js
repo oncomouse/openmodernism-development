@@ -72,19 +72,19 @@
 			}
 
 			// Continue with Backbone default set behavior:
-			Backbone.Model.prototype.set.call(this, attrs, options);
+			return Backbone.Model.prototype.set.call(this, attrs, options);
 		},
 		save: function(attrs, options) {
-				options || (options = {});
-				attrs || (attrs = _.clone(this.attributes));
+			options || (options = {});
+			attrs || (attrs = _.clone(this.attributes));
 
-				// Remove our JSON object cache:
-				delete attrs.metadata_json;
+			// Remove our JSON object cache:
+			delete attrs.metadata_json;
 
-				options.data = JSON.stringify(attrs);
+			options.data = JSON.stringify(attrs);
 
-				// Proxy the call to the original save function
-				return Backbone.Model.prototype.save.apply(this, attrs, options);
+			// Proxy the call to the original save function
+			return Backbone.Model.prototype.save.apply(this, attrs, options);
 		},
 		initialize: function() {
 		}
