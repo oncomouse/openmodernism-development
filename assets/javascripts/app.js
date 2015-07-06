@@ -35,6 +35,7 @@ define([
 		var Router = Backbone.Router.extend({
 			routeReady: function() {				
 				$('body').addClass('loaded');
+				$('#loading .fa-spin').removeClass('fa-spin');
 				$('#loading').hide('blind', {}, 500);
 			},
 			// Initialization code to run every time a route is rendered (similar to $(document).ready on a normal web page):
