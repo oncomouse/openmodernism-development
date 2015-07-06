@@ -5,7 +5,7 @@ define([
 	'jst',
 	'utilities/alert_manager',
 	'bootstrap/modal'
-], function($,_,Backbone,JST, AlertManager) {
+], function($,_,Backbone,JST,AlertManager) {
 	var LoginView = Backbone.View.extend({
 		el: 'body',
 		template: JST['login/login_modal'],
@@ -22,14 +22,14 @@ define([
 			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
 			
 			// If the LoginModal starts to close, clear it's contents:
-			$('#LoginModal').on('hide.bs.modal', this.clean_modal);
+			$('#LoginModal').on('hide.bs.modal', _.bind(this.clean_modal, this));
 		},
 		render: function() {
 			this.$el.append(this.template());
 			return this;
 		},
 		clean_modal: function() {
-			this.load_pane_template('login-form');
+			if ($('#LoginModal form').attr('action') != '#login-form') { this.load_pane_template('login-form'); }
 			AlertManager.clear_alerts({now: true, target: '#LoginModal'});
 			$('#LoginModal .has-error').removeClass('has-error');
 			$('#LoginModal input').val('');
@@ -43,7 +43,7 @@ define([
 			return false;
 		},
 		load_pane_template: function(target) {
-			if (typeof target === 'String') {
+			if (typeof target === 'string') {
 				target = $('a[data-target="' + target + '"]');
 			}
 			// Switch active tab:
