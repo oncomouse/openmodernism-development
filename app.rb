@@ -3,10 +3,14 @@ require 'cgi'
 
 require 'sinatra/base'
 require 'sinatra/head'
+require 'sinatra/flash'
 
 require 'data_mapper'
 require 'dm-migrations'
 require 'dm-types'
+
+require 'bcrypt'
+require 'warden'
 
 require 'haml'
 
@@ -19,6 +23,60 @@ require 'haml'
 
 
 class App < Sinatra::Base
+	enable :sessions
+	register Sinatra::Flash
+	
+	use Warden::Manager do |config|
+		config.serialize_into_session{|user| user.id }
+		config.serialize_from_session{|id| User.get(id) }
+		config.scope_defaults :default,
+			:strategies => [:password],
+			:action => 'auth/unauthenticated'
+		config.failure_app = self
+	end
+	
+	Warden::Manager.before_failure do |env,opts|
+		env['REQUEST_METHOD'] = 'POST'
+	end
+	
+	Warden::Strategies.add(:password) do
+		def valid?
+			params['user']['username'] && params['user']['password']
+		end
+
+		def authenticate!
+			user = User.first(:username => params['user']['username'])
+
+			if user.nil?
+				fail!("The username you entered does not exist.")
+			elsif user.authenticate(params['user']['password'])
+				success!(user)
+			else
+				fail!("Could not log in")
+			end
+		end
+	end
+	
+	post '/auth/login' do
+		env['warden'].authenticate!
+		
+		content_type 'application/json'
+		
+		"{status: #{env['warden'].message}#{if not env['warden'].user.nil? then ", user: #{env['warden'].user.to_json}" end}}"
+	end
+	
+	get '/auth/logout' do
+		env['warden'].raw_session.inspect
+		env['warden'].logout
+	end
+	
+	get '/authenticated' do
+		env['warden'].authenticate!
+		"{status: #{env['warden'].message}#{if not env['warden'].user.nil? then ", user: #{env['warden'].user.to_json}" end}}"
+	end
+	
+		
+	
 #	use Rack::Session::Cookie, secret: 'The world of Oath'
 #	use OmniAuth::Builder do
 #		provider :github, 'key', 'secret' #https://github.com/settings/applications
@@ -38,6 +96,8 @@ class App < Sinatra::Base
 			'sqlite:db/development.sqlite'
 		)
 	end
+	#require 'data_mapper'; require 'bcrypt'; DataMapper.setup(:default,'sqlite:db/development.sqlite'); Dir['./application/models/**/*.rb'].each { |m| require m }; DataMapper.finalize.auto_upgrade!
+	#require 'data_mapper'; require 'bcrypt'; DataMapper.setup(:default,'sqlite:db/production.sqlite'); Dir['./application/models/**/*.rb'].each { |m| require m }; DataMapper.finalize.auto_upgrade!
 
 	configure :production do
 		DataMapper.setup(
