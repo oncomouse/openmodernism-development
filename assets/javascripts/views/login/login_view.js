@@ -17,10 +17,6 @@ define([
 			// and load the default pane:
 			this.load_pane_template('login-form');
 			
-			// Handle form buttons submit:
-			$('#LoginModal .submit').click(_.bind(this.handle_modal_submit, this));
-			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
-			
 			// If the LoginModal starts to close, clear it's contents:
 			$('#LoginModal').on('hide.bs.modal', _.bind(this.clean_modal, this));
 		},
@@ -56,6 +52,10 @@ define([
 			
 			// Set form method to current action:
 			$('#LoginModal form').attr('action', '#' + $(target).attr('data-target'));
+			
+			// Handle form buttons submit:
+			$('#LoginModal .submit').click(_.bind(this.handle_modal_submit, this));
+			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
 			
 			// Resize the modal:
 			$('#LoginModal').modal('handleUpdate');
