@@ -20,18 +20,23 @@ define([
 			// Handle form buttons submit:
 			$('#LoginModal .submit').click(_.bind(this.handle_modal_submit, this));
 			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
+			
+			$('#LoginModal').on('hide.bs.modal', this.clean_modal);
 		},
 		render: function() {
 			this.$el.append(this.template());
 			return this;
 		},
+		clean_modal: function() {
+			AlertManager.clear_alerts({now: true, target: '#LoginModal'});
+			$('#LoginModal .has-error').removeClass('has-error');
+			$('#LoginModal input').val('');
+		},
 		switch_pane: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
 			
-			AlertManager.clear_alerts(true);
-			$('.has-error').removeClass('has-error');
-			$('.active input').val('');
+
 
 			this.load_pane_template(ev.target);
 			
@@ -57,8 +62,7 @@ define([
 			
 			return false;
 		},
-		clear_modal: function() {
-			$('#LoginModal input').val('');
+		remove_modal: function() {
 			$('#LoginModal').modal('hide');
 		}
 	});

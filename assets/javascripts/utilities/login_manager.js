@@ -17,7 +17,7 @@ define([
 			
 			// Connect Events:
 			this.listenTo(this.login_view, 'submit', this.form_submit);
-			this.login_view.listenTo(this, 'submitted', this.login_view.clear_modal);
+			this.login_view.listenTo(this, 'submitted', this.login_view.remove_modal);
 		},
 		authenticate: function() {
 			this.trigger('change');
@@ -43,8 +43,6 @@ define([
 			
 			$email_input = $('#LoginModal form').find('#email');
 			$password_input = $('#LoginModal form').find('#password');
-			
-			console.log($email_input);
 			
 			if($email_input.get(0).validity.valid) {
 				AlertManager.clear_alert('email-alert');
