@@ -39,12 +39,13 @@ define([
 		},
 		load_pane_template: function(target) {
 			$('#LoginModal .active').removeClass('active');
-			//$('.' + $(target).attr('data-target')).addClass('active');
 			
 			$('#LoginModalContent').html($('.templates .' + $(target).attr('data-target') + '.body').html());
 			$('#LoginModal .modal-footer').html($('.templates .' + $(target).attr('data-target') + '.footer').html());
 			
 			$(target).parent().addClass('active');
+			
+			$('#LoginModal form').attr('action', '#' + $(target).attr('data-target'));
 			
 			$('#LoginModal').modal('handleUpdate');
 		},

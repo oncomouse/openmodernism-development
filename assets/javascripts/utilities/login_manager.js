@@ -25,8 +25,7 @@ define([
 		form_submit: function(ev) {
 			var class_name;
 			
-			class_name = $(ev.target).eq(0).parent().attr('class').replace(/\s+active/,'');
-			//$form = $('.modal-body .' + class_name + ' form').eq(0);
+			class_name = $('#LoginModal form').attr('action').replace(/^\#/,'');
 			
 			switch(class_name) {
 				case 'login-form':
@@ -42,8 +41,10 @@ define([
 			var form_values, $email_input, $password_input;
 			var validation = true;
 			
-			$email_input = $('.panel-body.login-form').find('#email');
-			$password_input = $('.panel-body.login-form').find('#password');
+			$email_input = $('#LoginModal form').find('#email');
+			$password_input = $('#LoginModal form').find('#password');
+			
+			console.log($email_input);
 			
 			if($email_input.get(0).validity.valid) {
 				AlertManager.clear_alert('email-alert');
@@ -76,10 +77,10 @@ define([
 			var form_values, $email_input, $password_input, $password2_input, $first_input;
 			var validation = true;
 			
-			$email_input = $('.panel-body.create-form').find('#email');
-			$password_input = $('.panel-body.create-form').find('#password');
-			$password2_input = $('.panel-body.create-form').find('#password2');
-			$first_input = $('.panel-body.create-form input').eq(0);
+			$email_input = $('#LoginModal form').find('#email');
+			$password_input = $('#LoginModal form').find('#password');
+			$password2_input = $('#LoginModal form').find('#password2');
+			$first_input = $('#LoginModal form input').eq(0);
 			
 			if($email_input.get(0).validity.valid) {
 				AlertManager.clear_alert('email-alert');
