@@ -8,11 +8,14 @@ gem 'sinatra-assetpack', :group => [:development, :test]
 gem 'sinatra-head'
 gem 'sinatra-backbone'
 gem 'sinatra-support'
+gem 'sinatra-flash'
 gem 'tilt', '~>1.4.1'
 
 gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-types'
+
+gem 'warden'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
@@ -20,9 +23,11 @@ gem 'omniauth-github'
 gem 'omniauth-facebook'
 gem 'omniauth-openid'
 
-gem 'sshkit'
+gem 'sshkit', :group => [:development]
 
 gem 'shotgun', :group => [:development, :test]
+gem 'uglifier', :group => [:development]
+gem 'therubyracer', :group => [:development]
 
 gem 'dm-sqlite-adapter'#, :group => [:development, :test]
 #gem 'dm-mysql-adapter', :group => :production
