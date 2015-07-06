@@ -5,10 +5,21 @@ APP_CLASS = 'App'
 #require 'sinatra/assetpack/rake'
 require 'dm-migrations'
 
-require 'json'
+# List of files to skip:
+EXCLUDES = [
+	/^assets\//, # Don't upload uncompiled assets
+	/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
+	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js)/, # Skip all written JavaScript except the routes/
+	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
+	/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
+	/compass\.config\.rb/, # Don't upload build files
+	/app\.build\.js/, # Don't upload build files
+	/README\.md/,
+	/^views\/.*\/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
+	/development\.sqlite/, # Don't upload the development DB file
+	/ui\/(i18n|minified)/ # We don't need this anymore, but they match for jquery-ui files
+]
 
-require 'sshkit'
-require 'sshkit/dsl'
 
 desc "auto migrates the database"
 task :migrate do
@@ -23,22 +34,11 @@ task :upgrade do
 end
 
 task :deploy => "assets:pack" do
+	require 'sshkit'
+	require 'sshkit/dsl'
+	
 	puts "Running task :deploy"
 	
-	# List of files to skip:
-	excludes = [
-		/^assets\//, # Don't upload uncompiled assets
-		/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
-		/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js)/, # Skip all written JavaScript except the routes/
-		/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
-		/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
-		/compass\.config\.rb/, # Don't upload build files
-		/app\.build\.js/, # Don't upload build files
-		/README\.md/,
-		/^views\/.*\/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
-		/development\.sqlite/, # Don't upload the development DB file
-		/ui\/(i18n|minified)/ # We don't need this anymore, but they match for jquery-ui files
-	]
 	directories_made = [] # Cachce directories we create on the server
 	
 	# Use SSHKit to connect to the server:
@@ -46,7 +46,7 @@ task :deploy => "assets:pack" do
 		within "/home/eschaton/www/openmodernism.pilsch.com/current" do
 			# Upload the files:
 			Dir.glob('**/*.*').each do |file|
-				next if excludes.collect{|x| !x.match(file).nil? }.include? true # Exclude any files that match the exclusions
+				next if EXCLUDES.collect{|x| !x.match(file).nil? }.include? true # Exclude any files that match the exclusions
 				if not directories_made.include? File.dirname(file) # If we haven't made it, build the remote directory:
 					execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
 					directories_made << File.dirname(file)
@@ -63,7 +63,7 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:compile_css"]
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:uglify", "assets:compile_css"]
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
@@ -72,8 +72,25 @@ namespace :assets do
 		system ('rm -r assets-clean_copy')
 	end
 	
+	task :uglify do
+		require 'uglifier'
+		
+		puts "Running task assets:uglify"
+		
+		Dir.glob('public/**/*.js').each do |file|
+			next if EXCLUDES.collect{|x| !x.match(file).nil? }.include? true # Exclude any files that match the exclusions
+			puts "Uglifying #{file}"
+			compressed_source = Uglifier.compile(File.read(file))
+			File.open(file, 'w') do |f_pointer|
+				f_pointer.write(compressed_source)
+			end
+		end
+	end
+	
 	# Create a copy of the assets directory that only uses the vendor packages we are actually deploying and the JS files we need:
 	task :clean_copy do
+		require 'json'
+		
 		puts "Running task assets:clean_copy"
 		
 		# Create our copy:
