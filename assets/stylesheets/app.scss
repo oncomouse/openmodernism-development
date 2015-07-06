@@ -97,16 +97,13 @@ body.loaded {
 }
 
 #LoginModal {
-	.modal-footer, #LoginModalContent {
-		& > div {
-			display: none;
-			&.active {
-				display: block;
-			}
-		}
-	}
 	#LoginModalContent {
 		border-radius: 0 0 $panel-border-radius $panel-border-radius;
 		border-top: 0;
+	}
+	.templates {
+		.body, .footer {
+			display: none;
+		}
 	}
 }
