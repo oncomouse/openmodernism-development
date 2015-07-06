@@ -9,13 +9,14 @@ require 'dm-migrations'
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
 	/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
-	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js)/, # Skip all written JavaScript except the routes/
+	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js|app.js)/, # Skip all written JavaScript except the routes/
 	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
 	/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
 	/compass\.config\.rb/, # Don't upload build files
 	/app\.build\.js/, # Don't upload build files
 	/README\.md/,
-	/^views\/.*\/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
+	/build\.txt/,
+	/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
 	/development\.sqlite/, # Don't upload the development DB file
 	/ui\/(i18n|minified)/ # We don't need this anymore, but they match for jquery-ui files
 ]
@@ -54,7 +55,7 @@ task :deploy => "assets:pack" do
 				upload! file, "/home/eschaton/www/openmodernism.pilsch.com/current/#{File.dirname(file)}"
 			end
 			# Tell Phusion Passenger it needs to restart:
-			execute :mkdir, 'tmp'
+			execute :mkdir, '-p tmp'
 			execute :touch, 'tmp/restart.txt'
 		end
 	end
@@ -132,7 +133,7 @@ namespace :assets do
 	task :build_jst do 
 		puts "Running task assets:build_jst"
 		File.open("assets-clean_copy/javascripts/jst.js", "w") do |jst|
-			jst.write("define([], function(){var c = {}; var JST = {};")
+			jst.write("define(['underscore'], function(_){var c = {}; var JST = {};")
 			Dir.glob("views/**/*.jst.*").each do |template|
 				content = IO.read(template)
 				content.gsub!("\n", "\\n")
