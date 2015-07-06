@@ -33,32 +33,36 @@ define([
 		},
 		
 		clear_alerts: function(options) {
+			var target;
+			
 			options = (typeof options !== 'Object') ? {} : options;
 			options = _.defaults(options, {
 				now: false,
-				target: 'body'
+				target: 'body',
+				id: undefined
 			});
+			
+			if(options.id) {
+				if(options.id[0] !== '#') { options.id = '#' + options.id; }
+				options.target = $(options.id);
+			} else{ 
+				options.target = $(options.target).find('.alert.om-alert');
+			}
+			
 			if(options.now) {
-				$(options.target).find('.alert.om-alert').remove();
+				options.target.remove();
 			} else {
-		        $(options.target).find('.alert.om-alert').fadeTo(500, 0).slideUp(500, function(){
+		        options.target.fadeTo(500, 0).slideUp(500, function(){
 		            $(this).remove(); 
 		        });
 			}
 		},
 		
 		clear_alert: function(id, now) {
-			if(id[0] !== '#') { id = '#' + id; }
-			var $alert = $(id);
-			if($alert.length > 0) {
-				if(now) {
-					$alert.remove();
-				} else {
-					$alert.fadeTo(500, 0).slideUp(500, function(){
-			            $(this).remove(); 
-			        });
-				}
-			}
+			this.clear_alerts({
+				id: id,
+				now: now
+			});
 		}
 	}
 	
