@@ -1,7 +1,9 @@
 define([
+	'jquery',
+	'underscore',
 	'jst',
 	'bootstrap/alert'
-], function(JST) {
+], function($,_, JST) {
 	var AlertManager = {
 		show_alert: function(alert) {
 			alert = typeof alert === 'String' ? { message: alert } : alert;
@@ -30,23 +32,32 @@ define([
 			
 		},
 		
-		clear_alerts: function(now) {
-			if(now) {
-				$('.alert.om-alert').remove();
+		clear_alerts: function(options) {
+			options = (typeof options !== 'Object') ? {} : options;
+			options = _.defaults(options, {
+				now: false,
+				target: 'body'
+			});
+			if(options.now) {
+				$(options.target).find('.alert.om-alert').remove();
 			} else {
-		        $('.alert.om-alert').fadeTo(500, 0).slideUp(500, function(){
+		        $(options.target).find('.alert.om-alert').fadeTo(500, 0).slideUp(500, function(){
 		            $(this).remove(); 
 		        });
 			}
 		},
 		
-		clear_alert: function(id) {
+		clear_alert: function(id, now) {
 			if(id[0] !== '#') { id = '#' + id; }
 			var $alert = $(id);
 			if($alert.length > 0) {
-				$alert.fadeTo(500, 0).slideUp(500, function(){
-					            $(this).remove(); 
-					        });
+				if(now) {
+					$alert.remove();
+				} else {
+					$alert.fadeTo(500, 0).slideUp(500, function(){
+			            $(this).remove(); 
+			        });
+				}
 			}
 		}
 	}
