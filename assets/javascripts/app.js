@@ -4,8 +4,7 @@ define([
 	'backbone',
 	'lorem',
 	'views/sidebar_view',
-	'views/login/login_view',
-	'views/login/login_link_view',
+	'utilities/login_manager',
 	'jquery-ui/effect-blind',
 	'bootstrap/transition',
 	'bootstrap/collapse'
@@ -15,8 +14,7 @@ define([
 	Backbone,
 	Lorem,
 	SidebarView,
-	LoginView,
-	LoginLinkView
+	LoginManager
 ){
 	var start = function() {
 		var DEBUG = false;
@@ -63,20 +61,7 @@ define([
 				
 				this.login_manager = new LoginManager();
 				
-				this.login_view = new LoginView();
-				this.login_link = new LoginLinkView({model: this.login_manager});
-				
-				this.login_view.render();
-				this.login_link.render();		
-			}
-		});
-		
-		var LoginManager = Backbone.Model.extend({
-			initialize: function() {
 
-			},
-			authenticated: function() {
-				return false;
 			}
 		});
 

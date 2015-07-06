@@ -14,10 +14,13 @@ define([
 		},
 		template: JST['login/login_link'],
 		render: function() {
-			this.$el.html(this.template({authenticated: this.model.authenticated()}));
+			this.$el.html(this.template({model: this.model}));
 			return this;
 		},
 		initialize: function() {
+			
+			this.listenTo(this.model, 'change', this.render);
+			
 			$('nav .collapse ul.navbar-right').append(
 				this.render().el
 			);

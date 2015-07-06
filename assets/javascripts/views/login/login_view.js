@@ -1,9 +1,11 @@
 define([
 	'jquery',
+	'underscore',
 	'backbone',
 	'jst',
+	'utilities/alert_manager',
 	'bootstrap/modal'
-], function($,Backbone,JST) {
+], function($,_,Backbone,JST, AlertManager) {
 	var LoginView = Backbone.View.extend({
 		el: 'body',
 		template: JST['login/login_modal'],
@@ -11,10 +13,13 @@ define([
 			this.render();
 			
 			// Attach the login modal tab manager:
-			$('#LoginModal ul.nav a').click(this.switch_pane);
+			$('#LoginModal ul.nav a').click(_.bind(this.switch_pane, this));
+			
+			this.load_pane_template($('a[data-target="login-form"]'));
 			
 			// Handle form buttons submit:
-			$('#LoginModal .submit').click(this.handle_modal_submit);
+			$('#LoginModal .submit').click(_.bind(this.handle_modal_submit, this));
+			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
 		},
 		render: function() {
 			this.$el.append(this.template());
@@ -23,20 +28,37 @@ define([
 		switch_pane: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
-
-			$('#LoginModal .active').removeClass('active');
-			$('.' + $(this).attr('data-target')).addClass('active');
-			$(this).parent().addClass('active');
 			
-			$('#LoginModal').modal('handleUpdate');
+			AlertManager.clear_alerts(true);
+			$('.has-error').removeClass('has-error');
+			$('.active input').val('');
+
+			this.load_pane_template(ev.target);
 			
 			return false;
+		},
+		load_pane_template: function(target) {
+			$('#LoginModal .active').removeClass('active');
+			//$('.' + $(target).attr('data-target')).addClass('active');
+			
+			$('#LoginModalContent').html($('.templates .' + $(target).attr('data-target') + '.body').html());
+			$('#LoginModal .modal-footer').html($('.templates .' + $(target).attr('data-target') + '.footer').html());
+			
+			$(target).parent().addClass('active');
+			
+			$('#LoginModal').modal('handleUpdate');
 		},
 		handle_modal_submit: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
+
+			this.trigger('submit', ev);
 			
 			return false;
+		},
+		clear_modal: function() {
+			$('#LoginModal input').val('');
+			$('#LoginModal').modal('hide');
 		}
 	});
 	
