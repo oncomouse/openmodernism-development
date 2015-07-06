@@ -54,8 +54,8 @@ define([
 			$('#LoginModal form').attr('action', '#' + $(target).attr('data-target'));
 			
 			// Handle form buttons submit:
-			$('#LoginModal .submit').click(_.bind(this.handle_modal_submit, this));
-			$('#LoginModal form').on('submit', _.bind(this.handle_modal_submit, this));
+			$('#LoginModal .submit').off('click').click(_.bind(this.handle_modal_submit, this));
+			$('#LoginModal form').off('submit').on('submit', _.bind(this.handle_modal_submit, this));
 			
 			// Resize the modal:
 			$('#LoginModal').modal('handleUpdate');
