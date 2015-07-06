@@ -1,0 +1,1 @@
+<a href="#" id="LoginLink"><% if(authenticated) {%>Logout<%  } else {%>Login<%}%></a>
