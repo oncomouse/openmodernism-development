@@ -37,7 +37,7 @@ define([
 			}
 			return false;
 		},
-		form_submit_login() {
+		form_submit_login: function() {
 			var form_values, $email_input, $password_input;
 			var validation = true;
 			
@@ -71,7 +71,7 @@ define([
 				this.trigger('submitted');
 			}
 		},
-		form_submit_create() {
+		form_submit_create: function() {
 			var form_values, $email_input, $password_input, $password2_input, $first_input;
 			var validation = true;
 			
