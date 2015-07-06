@@ -64,5 +64,6 @@
 			'exclude': ['main']
 		}
 	],
-	'skipDirOptimize': false
+	'optimize': 'none',
+	'skipDirOptimize': true
 })
