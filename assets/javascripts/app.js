@@ -5,6 +5,7 @@ define([
 	'lorem',
 	'views/sidebar_view',
 	'utilities/login_manager',
+	'utilities/form_validation',
 	'jquery-ui/effect-blind',
 	'bootstrap/transition',
 	'bootstrap/collapse'
@@ -14,7 +15,8 @@ define([
 	Backbone,
 	Lorem,
 	SidebarView,
-	LoginManager
+	LoginManager,
+	FormValidation
 ){
 	var start = function() {
 		var DEBUG = false;
@@ -37,6 +39,8 @@ define([
 				$('body').addClass('loaded');
 				$('#loading .fa-spin').removeClass('fa-spin');
 				$('#loading').hide('blind', {}, 500);
+				
+				FormValidation.setup();
 			},
 			// Initialization code to run every time a route is rendered (similar to $(document).ready on a normal web page):
 			initialize: function(options) {
