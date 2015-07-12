@@ -66,7 +66,7 @@ if (!Function.prototype.bind) {
 	else if (typeof jQuery !== 'undefined' && typeof $.fn.tooltip !== 'undefined') {
 		window.FormValidation = factory(jQuery);
 	} else {
-		console.log('Could not load required dependencies for Form Validation (jquery)');
+		console.log('Could not load required dependencies for Form Validation (jquery & bootstrap/tooltip)');
 	}
 }(function($){
 	var FormValidation = {
