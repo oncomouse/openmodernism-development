@@ -177,9 +177,13 @@ if (!Function.prototype.bind) {
 				}
 			}.bind(this));
 
-			if(!valid) {
+			if(valid || valid && form.attr('data-nosubmit') == 'data-nosubmit') {
+				form.trigger('success.validation');
+			}
+			if(!valid || form.attr('data-nosubmit') == 'data-nosubmit') {
 				ev.preventDefault();
 				ev.stopPropagation();
+				valid = false;
 			}
 			return valid;
 		},
