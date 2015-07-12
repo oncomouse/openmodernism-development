@@ -278,6 +278,18 @@ if (!Function.prototype.bind) {
 		test: function(input) { var input2 = $(input.attr('data-match')); return input.val() == input2.val(); },
 		msg: 'Entered value does not match.'
 	});
+	FormValidation.addTest({
+		name: 'date',
+		match: function(input) { return input.attr('type') == 'date'; },
+		test: function(input) { if (input.attr('pattern') !== undefined) { return true; } return input.val().match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/);},
+		msg: 'Please enter a valid date (YYYY-MM-DD)'
+	});
+	FormValidation.addTest({
+		name: 'tel',
+		match: function(input) { return input.attr('type') == 'tel'; },
+		test: function(input) { if (input.attr('pattern') !== undefined) { return true; } return input.val().match(/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i);},
+		msg: 'Please enter a valid telephone number.'
+	})
 	
 	return FormValidation;
 }));
