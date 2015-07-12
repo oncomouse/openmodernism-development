@@ -3,9 +3,9 @@ define([
 	'underscore',
 	'backbone',
 	'jst',
-	'utilities/alert_manager',
+	'utilities/form_validation',
 	'bootstrap/modal'
-], function($,_,Backbone,JST,AlertManager) {
+], function($,_,Backbone,JST,FormValidation) {
 	var LoginView = Backbone.View.extend({
 		el: 'body',
 		template: JST['login/login_modal'],
@@ -26,15 +26,15 @@ define([
 		},
 		clean_modal: function() {
 			if ($('#LoginModal form').attr('action') != '#login-form') { this.load_pane_template('login-form'); }
-			AlertManager.clear_alerts({now: true, target: '#LoginModal'});
-			$('#LoginModal .has-error').removeClass('has-error');
 			$('#LoginModal input').val('');
+			FormValidation.clear_errors('#LoginModal form');
 		},
 		switch_pane: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
 
 			this.load_pane_template(ev.target);
+			
 			
 			return false;
 		},
@@ -53,9 +53,14 @@ define([
 			// Set form method to current action:
 			$('#LoginModal form').attr('action', '#' + $(target).attr('data-target'));
 			
-			// Handle form buttons submit:
-			$('#LoginModal .submit').off('click').click(_.bind(this.handle_modal_submit, this));
-			$('#LoginModal form').off('submit').on('submit', _.bind(this.handle_modal_submit, this));
+			// Turn off form submission after the form validator:
+			$('#LoginModal form').attr('data-nosubmit', 'data-nosubmit');
+			
+			// Hook up form validation:
+			FormValidation.setup($('#LoginModal form'));
+			
+			// Trigger the modal submission handler when validation is finished:
+			$('#LoginModal form').on('success.validation', _.bind(this.handle_modal_submit, this));
 			
 			// Resize the modal:
 			$('#LoginModal').modal('handleUpdate');
