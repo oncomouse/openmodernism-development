@@ -105,6 +105,8 @@ if (!Function.prototype.bind) {
 			} else {
 				if(typeof input.attr('data-error-msg') !== 'undefined') {
 					msg = input.attr('data-error-msg');
+				} else if(typeof msg === 'function') {
+					msg = msg(input);
 				}
 				input.after($('<div class="error-msg">' + msg + '</div>'));
 			}
