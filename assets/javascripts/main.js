@@ -15,7 +15,8 @@ var requirejs_configuration = {
 		'lorem': '../vendor/loremjs/lorem',
 		'sprintf': 'vendor/sprintf-amd/sprintf-shim',
 		'sprintf-vendor': '../vendor/sprintf/src/sprintf',
-		'writedown': 'vendor/writedown/writedown'
+		'writedown': 'vendor/writedown/writedown',
+		'google-phonenumberutil': 'vendor/google/phonenumberutil.min'
 	},
 	shim: {
 		'lodash': {
@@ -33,6 +34,9 @@ var requirejs_configuration = {
 		},
 		'sprintf': {
 			exports: 'sprintf'
+		},
+		'google-phonenumberutil': {
+			exports: 'PhoneNumberUtil'
 		},
 		'bootstrap/affix':      { deps: ['jquery'], exports: '$.fn.affix' }, 
 		'bootstrap/alert':      { deps: ['jquery'], exports: '$.fn.alert' },
