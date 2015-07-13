@@ -212,11 +212,20 @@ if (!Function.prototype.bind) {
 			// Discard bad inputs:
 			if(typeof test_object === 'undefined' || !('match' in test_object) || !('test' in test_object)) {
 				console.log('Invalid test added to addTest()', arguments);
-				return false;
+				return this;
 			}
 			
 			this.tests.push(test_object);
-			return true;
+			return this;
+		},
+		removeTest: function(name) {
+			var index = _.findIndex(this.tests, _.bind(function(x) { return x.name == this; }), name);
+			
+			if(index >= 0 && index < this.test.length) {
+				tests.splice(index, 1);
+			}
+			
+			return this;
 		}
 	};
 	
@@ -294,12 +303,15 @@ if (!Function.prototype.bind) {
 	});
 	FormValidation.addTest({ // This uses NANP style numbers
 		name: 'tel',
-		match: function(input) { return input.attr('type') == 'tel'; },
+		match: function(input) { return input.attr('type') == 'tel'; }, //PhoneNumberUtil
 		test: function(input) { 
 			if (input.attr('pattern') !== undefined) { return true; }
 			var country = 'US', regex;
 			if (input.attr('country') !== undefined) {
 				country = input.attr('country');
+			}
+			if(typeof PhoneNumberUtil === 'function') { // Have you loaded the Google Phonenumber Library?
+				return PhoneNumberUtil(input.val(), country);
 			}
 			switch(country) {
 				case 'US':
