@@ -1,3 +1,5 @@
+'use strict';
+
 define([
 	'views/login/login_view',
 	'views/login/login_link_view',

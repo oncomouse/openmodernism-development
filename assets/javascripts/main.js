@@ -1,6 +1,8 @@
+'use strict';
+
 var JAVASCRIPT_DIR = '/javascripts';
 var requirejs_configuration = {
-	baseUrl: '/javascripts',
+	baseUrl: JAVASCRIPT_DIR,
 
 	paths: {
 		'backbone': '../vendor/backbone/backbone',

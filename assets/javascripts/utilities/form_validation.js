@@ -1,3 +1,5 @@
+'use strict';
+
 // Polyfill: for Array.reduce() and Function.bind()
 if (!Array.prototype.reduce) {
 	Array.prototype.reduce = function(callback /*, initialValue*/) {
@@ -239,7 +241,7 @@ if (!Function.prototype.bind) {
 	FormValidation.addTest({
 		name: 'color',
 		match: function(input) { return input.attr('type') == 'color'; },
-		test: function(input) { return input.val().match(/(\#[0-9A-F]{6}|\#[0-9A-F]{3})/); },
+		test: function(input) { return input.val().match(/(\#[0-9A-Fa-f]{6}|\#[0-9A-Fa-f]{3})/); },
 		msg: 'Please enter a valid color (#000 OR #000000).'
 	});
 	FormValidation.addTest({
@@ -279,15 +281,90 @@ if (!Function.prototype.bind) {
 		msg: 'Entered value does not match.'
 	});
 	FormValidation.addTest({
+		name: 'number',
+		match: function(input) { return input.attr('type') == 'number'; },
+		test: function(input) { if (input.attr('min') !== undefined || input.attr('max') !== undefined) { return true; } return /^[0-9](\.[0-9]+)+$/.test(input.val());},
+		msg: 'Please enter a valid number'
+	});
+	FormValidation.addTest({
 		name: 'date',
 		match: function(input) { return input.attr('type') == 'date'; },
 		test: function(input) { if (input.attr('pattern') !== undefined) { return true; } return input.val().match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/);},
 		msg: 'Please enter a valid date (YYYY-MM-DD)'
 	});
-	FormValidation.addTest({
+	FormValidation.addTest({ // This uses NANP style numbers
 		name: 'tel',
 		match: function(input) { return input.attr('type') == 'tel'; },
-		test: function(input) { if (input.attr('pattern') !== undefined) { return true; } return input.val().match(/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i);},
+		test: function(input) { 
+			if (input.attr('pattern') !== undefined) { return true; }
+			var country = 'US', regex;
+			if (input.attr('country') !== undefined) {
+				country = input.attr('country');
+			}
+			switch(country) {
+				case 'US':
+					regex = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+					break;
+				case 'AE':
+					regex = /./;
+					break;
+				case 'BG':
+					regex = /./;
+					break;
+				case 'BR':
+					regex = /./;
+					break;
+				case 'CN':
+					regex = /./;
+					break;
+				case 'CZ':
+					regex = /./;
+					break;
+				case 'DK':
+					regex = /./;
+					break;
+				case 'FR':
+					regex = /./;
+					break;
+				case 'DE':
+					regex = /./;
+					break;
+				case 'IN':
+					regex = /./;
+					break;
+				case 'MA':
+					regex = /./;
+					break;
+				case 'NL':
+					regex = /./;
+					break;
+				case 'PK':
+					regex = /./;
+					break;
+				case 'RO':
+					regex = /./;
+					break;
+				case 'RU':
+					regex = /./;
+					break;
+				case 'SK':
+					regex = /./;
+					break;
+				case 'ES':
+					regex = /./;
+					break;
+				case 'TH':
+					regex = /./;
+					break;
+				case 'GB':
+					regex = /./;
+					break;
+				case 'VE':
+					regex = /./;
+					break;
+			}
+			return regex.test(input.val());
+		},
 		msg: 'Please enter a valid telephone number.'
 	})
 	

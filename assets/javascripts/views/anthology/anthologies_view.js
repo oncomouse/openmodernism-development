@@ -1,3 +1,5 @@
+'use strict';
+
 define([
 	'backbone',
 	'views/anthology/anthology_short_view',

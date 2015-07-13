@@ -1,3 +1,5 @@
+'use strict';
+
 define([
 	'collections/anthology_collection',
 	'views/anthology/anthologies_view',

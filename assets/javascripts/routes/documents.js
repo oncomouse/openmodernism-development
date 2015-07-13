@@ -1,3 +1,5 @@
+'use strict';
+
 define([
 	'jquery',
 	'collections/document_collection',

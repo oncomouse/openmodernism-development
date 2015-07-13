@@ -1,3 +1,5 @@
+'use strict';
+
 (function (factory) {
 
 	// CommonJS
@@ -21,7 +23,7 @@
 			metadata: ''
 		},
 		get: function(attr) {
-			output = this.attributes[attr];
+			var output = this.attributes[attr];
 			if(attr == 'metadata') {
 				// Either grab the metadata JSON object from our cache:
 				if('metadata_json' in this.attributes) {

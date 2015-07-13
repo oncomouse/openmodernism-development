@@ -1,3 +1,5 @@
+'use strict';
+
 (function (factory) {
 
 	// CommonJS
@@ -67,7 +69,7 @@
 			return output;
 		},
 		get: function(attr) {
-			output = this.attributes[attr];
+			var output = this.attributes[attr];
 			if(attr in this.attributes['metadata']) {
 				output = this.attributes['metadata'][attr];
 			}

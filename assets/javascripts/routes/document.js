@@ -1,3 +1,5 @@
+'use strict';
+
 define([
 	'models/document',
 	'views/document/document_view'
@@ -5,7 +7,7 @@ define([
 	Document,
 	DocumentView
 ) {
-	DocumentRoute = function(app, id) {
+	var DocumentRoute = function(app, id) {
 		var currentDocument = {};
 	
 		app.clearAppCanvas();
