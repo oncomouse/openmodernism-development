@@ -301,78 +301,95 @@ if (!Function.prototype.bind) {
 		test: function(input) { if (input.attr('pattern') !== undefined) { return true; } return input.val().match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/);},
 		msg: 'Please enter a valid date (YYYY-MM-DD)'
 	});
-	FormValidation.addTest({ // This uses NANP style numbers
+	/*
+	 * This telephone validator is a mess (b/c telephone validation is a mess of international standards.).
+	 * Google provides a library to do phone validation, but it's huge (around 200K compiled). The native
+	 * version I've provided supports a few country codes (US & UK are pretty good), but come in at a lot smaller.
+	 *
+	 * You can include the google library by adding <script src="google/phonenumberutil.min.js"></script> before this
+	 * library or take a look at the provided amd-main.js file to see how to include it in your Require.js project.
+	 *
+	 * If you need to check telephone numbers, I would suggest writing a custom test to your country or accept the 
+	 * hit from the Google library.
+	 */
+	FormValidation.addTest({
 		name: 'tel',
-		match: function(input) { return input.attr('type') == 'tel'; }, //PhoneNumberUtil
+		match: function(input) { return input.attr('type') == 'tel'; },
 		test: function(input) { 
 			if (input.attr('pattern') !== undefined) { return true; }
 			var country = 'US', regex;
 			if (input.attr('country') !== undefined) {
 				country = input.attr('country');
 			}
-			if(typeof PhoneNumberUtil === 'function') { // Have you loaded the Google Phonenumber Library?
+			// If the Google library (which is awesome) is loaded, use it:
+			if(typeof PhoneNumberUtil === 'function') {
 				return PhoneNumberUtil(input.val(), country);
 			}
+			
+			// Otherwise, use our builtin in validator which is solid on US & UK numbers and OK on the few others implemented below:
 			switch(country) {
 				case 'US':
 					regex = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 					break;
 				case 'AE':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'BG':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'BR':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'CN':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'CZ':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'DK':
-					regex = /./;
+					regex = /^((\(?\+45\)?)?)(\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2})$/;
 					break;
 				case 'FR':
-					regex = /./;
+					regex = /^0[1-6]{1}(([0-9]{2}){4})|((\s[0-9]{2}){4})|((-[0-9]{2}){4})$/;
 					break;
 				case 'DE':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'IN':
-					regex = /./;
+					regex = /^0{0,1}[1-9]{1}[0-9]{2}[\s]{0,1}[\-]{0,1}[\s]{0,1}[1-9]{1}[0-9]{6}$/;
 					break;
 				case 'MA':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'NL':
-					regex = /./;
+					regex = /(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/;
 					break;
 				case 'PK':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'RO':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'RU':
-					regex = /./;
+					regex = /((8|\+7)-?)?\(?\d{3}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}/;
 					break;
 				case 'SK':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'ES':
-					regex = /./;
+					regex = /^[0-9]{2,3}-? ?[0-9]{6,7}$/;
 					break;
 				case 'TH':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 				case 'GB':
-					regex = /./;
+					regex = /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/;
+					break;
+				case 'AU':
+					regex = /^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3}$/;
 					break;
 				case 'VE':
-					regex = /./;
+					regex = /^[Z]$/;
 					break;
 			}
 			return regex.test(input.val());
