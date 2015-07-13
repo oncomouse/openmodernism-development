@@ -64,12 +64,13 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:uglify", "assets:compile_css"]
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
 		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
+		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
 	end
 	
