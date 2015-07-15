@@ -1,21 +1,18 @@
 'use strict';
 
-(function (factory) {
 
-	// CommonJS
-	if (typeof exports == 'object') {
-		module.exports = factory(require('jquery'), require('backbone'));
-	}
-	// AMD
-	else if (typeof define == 'function' && define.amd) {
-		define(['jquery', 'backbone', 'jst', 'bootstrap/affix'], factory);
-	}
-	// Browser
-	else if (typeof $ !== 'undefined' && typeof Backbone !== 'undefined') {
-		window.SidebarView = factory($, Backbone, JST);
-	}
-
-}(function ($,Backbone, JST) {
+define([
+	'jquery',
+	'backbone',
+	'dispatcher',
+	'jst',
+	'bootstrap/affix'
+],function (
+	$,
+	Backbone,
+	AppDispatcher,
+	JST
+) {
 	var SidebarView = Backbone.View.extend({
 		route: 'default',
 		routesWeCareAbout: { // key is route name and value is template
@@ -49,4 +46,4 @@
 	});
 	
 	return SidebarView
-}));
+});
