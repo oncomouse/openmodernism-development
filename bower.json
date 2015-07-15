@@ -1,0 +1,33 @@
+{
+  "name": "anthology-jammr",
+  "version": "0.0.0",
+  "homepage": "https://github.com/oncomouse/openmodernism-development",
+  "authors": [
+    "oncomouse <oncomouse@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone.localstorage": "~1.1.16",
+    "bootstrap-sass-official": "~3.3.5",
+    "css3-mediaqueries-js": "~1.0.0",
+    "html5shiv": "~3.7.2",
+    "jquery-ui": "~1.11.4",
+    "js-yaml": "~3.3.1",
+    "lodash": "~3.9.3",
+    "r.js": "~2.1.18",
+    "requirejs": "~2.1.18",
+    "respond": "~1.4.2",
+    "sprintf": "~1.0.2"
+  }
+}
