@@ -19,10 +19,20 @@ define([
 			'documents': JST['sidebars/documents']
 		},
 		initialize: function(router) {
-			// Probably attach a login manager or something
+			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
 		},
 		changeRoute: function(route) {
 			this.route = route;
+		},
+		dispatchCallback: function(payload) {
+			switch(payload.actionType) {
+				case 'route:ready':
+					this.render();
+					break;
+				case 'route':
+					this.changeRoute(payload.route);
+					break;
+			}
 		},
 		render: function() {
 			if(this.route in this.routesWeCareAbout) {

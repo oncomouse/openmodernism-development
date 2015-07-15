@@ -4,8 +4,9 @@ define([
 	'jquery',
 	'backbone',
 	'jst',
+	'dispatcher',
 	'bootstrap/modal'
-], function($,Backbone,JST) {
+], function($,Backbone,JST,AppDispatcher) {
 	var LoginLinkView = Backbone.View.extend({
 		tagName: 'li',
 		attributes: {
@@ -21,11 +22,18 @@ define([
 		},
 		initialize: function() {
 			
-			this.listenTo(this.model, 'change', this.render);
+			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
 			
 			$('nav .collapse ul.navbar-right').append(
 				this.render().el
 			);
+		},
+		dispatchCallback: function(payload) {
+			switch(payload.actionType) {
+				case 'login:change':
+					this.render();
+					break;
+			}
 		},
 		show_modal: function(ev) {
 			ev.stopPropagation();

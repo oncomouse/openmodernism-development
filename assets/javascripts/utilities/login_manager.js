@@ -4,10 +4,12 @@ define([
 	'views/login/login_view',
 	'views/login/login_link_view',
 	'utilities/alert_manager',
+	'dispatcher'
 ], function(
 	LoginView,
 	LoginLinkView,
-	AlertManager
+	AlertManager,
+	AppDispatcher
 ){
 	var LoginManager = Backbone.Model.extend({
 		initialize: function() {
@@ -17,12 +19,18 @@ define([
 			this.login_view.render();
 			this.login_link_view.render();
 			
-			// Connect Events:
-			this.listenTo(this.login_view, 'submit', this.form_submit);
-			this.login_view.listenTo(this, 'submitted', this.login_view.remove_modal);
+			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
+			
 		},
 		authenticate: function() {
-			this.trigger('change');
+			AppDispatcher.dispatch({actionType: 'login:change'});
+		},
+		dispatchCallback: function(payload) {
+			switch(payload.actionType) {
+				case 'login.submit':
+					this.form_submit(payload.event);
+					break;
+			}
 		},
 		form_submit: function(ev) {
 			var class_name;
@@ -70,7 +78,9 @@ define([
 					password: $password_input.val()
 				};
 				
-				this.trigger('submitted');
+				AppDispatcher.dispatch({
+					actionType: 'login.submitted'
+				});
 			}
 		},
 		form_submit_create: function() {

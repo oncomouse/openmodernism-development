@@ -15,7 +15,8 @@ var requirejs_configuration = {
 		'lorem': '../vendor/loremjs/lorem',
 		'sprintf': 'vendor/sprintf-amd/sprintf-shim',
 		'sprintf-vendor': '../vendor/sprintf/src/sprintf',
-		'writedown': 'vendor/writedown/writedown'
+		'writedown': 'vendor/writedown/writedown',
+		'Dispatcher': 'vendor/flux-amd/Flux'
 	},
 	shim: {
 		'lodash': {

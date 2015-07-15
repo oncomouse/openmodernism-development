@@ -3,11 +3,13 @@
 define([
 	'jquery',
 	'collections/document_collection',
-	'views/document/documents_view'
+	'views/document/documents_view',
+	'dispatcher'
 ], function(
 	$,
 	DocumentCollection,
-	DocumentsView
+	DocumentsView,
+	AppDispatcher
 ) {
 	var DocumentsRoute = function(app) {
 		var fetch_collection = false;
@@ -24,12 +26,12 @@ define([
 		if(fetch_collection) {
 			app.documentList.fetch().then(function() { 
 				$.when(app.documentsView.render(app.documentList)).done(function() {
-					app.router.trigger('ready');
+					AppDispatcher.dispatch({actionType: 'route:ready' });
 				});
 			});
 		} else {
 			$.when(app.documentsView.render(app.documentList)).done(function() {
-				app.router.trigger('ready');
+				AppDispatcher.dispatch({actionType: 'route:ready' });
 			});
 		}
 	}
