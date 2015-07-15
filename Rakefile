@@ -9,7 +9,7 @@ require 'dm-migrations'
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
 	/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
-	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js|app.js)/, # Skip all written JavaScript except the routes/
+	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js|app.js|dispatcher.js|router.js)/, # Skip all written JavaScript except the routes/
 	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
 	/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
 	/compass\.config\.rb/, # Don't upload build files
@@ -64,7 +64,7 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:generate_polyfill", "assets:uglify", "assets:compile_css"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
@@ -85,6 +85,21 @@ namespace :assets do
 			compressed_source = Uglifier.compile(File.read(file))
 			File.open(file, 'w') do |f_pointer|
 				f_pointer.write(compressed_source)
+			end
+		end
+	end
+	
+	task :generate_polyfill do
+		puts "Running task assets:generate_polyfill"
+		polyfill = [
+			'/vendor/respond/dest/respond.src.js',
+			'/vendor/css3-mediaqueries-js/css3-mediaqueries.js',
+			'/vendor/html5shiv/dist/html5shiv.js'
+		]
+		system "mkdir -p public/javascripts"
+		File.open('public/javascripts/polyfill.js', 'w') do |poly_fp|
+			polyfill.each do |p|
+				poly_fp.write(IO.read "assets/#{p}")
 			end
 		end
 	end
