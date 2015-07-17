@@ -31,7 +31,7 @@ define([
 		},
 		dispatchCallback: function(payload) {
 			switch(payload.actionType) {
-				case 'login.submitted':
+				case 'login:submitted':
 					this.remove_modal();
 					break;
 			}
@@ -83,7 +83,7 @@ define([
 
 			// Signal to the LoginManager that we have a form submission:
 			AppDispatcher.dispatch({
-				actionType: 'login.submit',
+				actionType: 'login:submit',
 				event: ev
 			});
 			
