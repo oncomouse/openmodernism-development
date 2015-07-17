@@ -54,8 +54,8 @@ define([
 			}, this);
 			
 			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
-			this.sidebar = new SidebarView();
 			
+			this.sidebar = new SidebarView();
 			this.login_manager = new LoginManager();
 			
 
