@@ -64,7 +64,7 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:run_r_js", "assets:generate_polyfill", "assets:uglify", "assets:compile_css"] #
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:run_r_js", "assets:generate_polyfill", "assets:uglify", "assets:compile_css"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
@@ -72,6 +72,19 @@ namespace :assets do
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
+	end
+	
+	task :compile_react do
+		require 'babel/transpiler'
+		puts "Running task assets:compile_react"
+		system "mkdir -p assets-clean_copy/javascripts/components/"
+		Dir.glob('assets/react/components/**.js').each do |react_file|
+			react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/')
+			File.open(react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/'), 'w') do |fp|
+				fp.write Babel::Transpiler.transform(File.read(react_file))['code'].gsub(/\\n/,"\n").gsub(/\\t/,"\t")
+			end
+		end
+		#system("node node node_modules/babel/bin/babel.js assets/react/components/ --out-dir assets-clean_copy/javascripts/components/")
 	end
 	
 	task :uglify do

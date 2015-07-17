@@ -2,12 +2,16 @@ class App < Sinatra::Base
 	if :development
 		require 'sinatra/backbone'
 		require 'sinatra/support'
+		require './application/helpers/jsx_support'
 		
 		register Sinatra::JstPages
 		serve_jst '/javascripts/jst.js'
 		
 		register Sinatra::CompassSupport
 		set :scss, Compass.sass_engine_options.merge({ :load_paths => [ "#{App.root}/assets/stylesheets/", "#{App.root}/assets/vendor/", "#{App.root}/public/vendor/" ] })
+		
+		register Sinatra::JsxSupport
+		serve_jsx '/javascripts/components', :from => 'assets/react/components'
 	
 		Compass.configuration do |config|
 			config.sass_dir         = "assets/stylesheets"
@@ -32,7 +36,7 @@ class App < Sinatra::Base
 			]
 		
 			js :polyfill, [
-				'/vendor/respond/dest/respond.min.js',
+				'/vendor/respond/dest/respond.src.js',
 				'/vendor/css3-mediaqueries-js/css3-mediaqueries.js',
 				'/vendor/html5shiv/dist/html5shiv.js'
 			]
