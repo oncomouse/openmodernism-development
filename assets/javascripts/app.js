@@ -16,7 +16,7 @@ define([
 	Router
 ){
 	var start = function() {
-		var DEBUG = false;
+		var DEBUG = true;
 
 		var app = {};
 
@@ -39,15 +39,18 @@ define([
 				require([
 					'postal.diagnostics'
 				], function(DiagnosticsWireTap) {
-					
+					var dwt = new DiagnosticsWireTap({
+						name: 'console',
+						writer: function(output) { console.log(output); }
+					});
 				});
-				app.router.on('all', function(route, params) {
+				/*app.router.on('all', function(route, params) {
 					console.log('Route', arguments);
 				});
 				Backbone.Model.prototype.trigger = function() {
 					console.log('Event', arguments);
 					Backbone.Events.trigger.apply(this, arguments);
-				}
+				}*/
 			}
 
 			Backbone.history.start();

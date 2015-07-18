@@ -17,7 +17,8 @@ var requirejs_configuration = {
 		'sprintf-vendor': '../vendor/sprintf/src/sprintf',
 		'writedown': 'vendor/writedown/writedown',
 		'react': '../vendor/react/react',
-		'postal': '../vendor/postal/lib/postal'
+		'postal': '../vendor/postal/lib/postal',
+		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics'
 	},
 	shim: {
 		'lodash': {
