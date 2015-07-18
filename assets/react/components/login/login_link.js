@@ -30,35 +30,20 @@ define([
 				}
 			}, this));
 			return {
-				//rendered: false,
 				loginStatus: false
 			}
 		},
 		componentDidMount: function () {			
 		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'login:change':
-					if (this.isMounted()){
-						this.setState({loginStatus: payload.loginStatus});
-						this.render();
-					}
-					break;
-				case 'route:ready':
-					if(!this.isMounted()){
-						React.render(
-							<LoginLink />,
-							$('nav .collapse ul.navbar-right').get(0)
-						);
-						//this.setState({rendered: true});
-					}
-					break;
-			}
+		clickLogin: function(ev) {
+			ev.stopPropagation();
+			ev.preventDefault();
+			this.channel['login'].publish('show-modal',{});
 		},
 		render: function() {
-			var loginButton = <LoginButton/>;
+			var loginButton = <LoginButton onClick={this.clickLogin}/>;
 			if(this.state.loginStatus) {
-				loginButton = <LogoutButton/>;
+				loginButton = <LogoutButton onClick={function() {}}/>;
 			}
 			return (<li>
 				{loginButton}
@@ -70,7 +55,7 @@ define([
 	var LoginButton = React.createClass({
 		render: function() {
 			return (
-				<a href="#" id="LoginLink">Login</a>
+				<a href="#" id="LoginLink" onClick={this.props.onClick}>Login</a>
 			)
 		}
 	});
@@ -78,7 +63,7 @@ define([
 	var LogoutButton = React.createClass({
 		render: function() {
 			return (
-				<a href="#" id="LoginLink">Logout</a>
+				<a href="#" id="LoginLink" onClick={this.props.onClick}>Logout</a>
 			)
 		}
 	})
