@@ -4,13 +4,13 @@
 define([
 	'jquery',
 	'backbone',
-	'dispatcher',
+	'postal',
 	'jst',
 	'bootstrap/affix'
 ],function (
 	$,
 	Backbone,
-	AppDispatcher,
+	postal,
 	JST
 ) {
 	var SidebarView = Backbone.View.extend({
@@ -19,7 +19,15 @@ define([
 			'documents': JST['sidebars/documents']
 		},
 		initialize: function(router) {
-			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
+			this.channel = {};
+			this.channel['route'] = postal.channel('route');
+			
+			this.channel['route'].subscribe('ready', _.bind(function(data, envelope) {
+				this.render();
+			},this));
+			this.channel['route'].subscribe('change', _.bind(function(data, envelope) {
+				this.changeRoute(data.route);
+			},this));
 		},
 		changeRoute: function(route) {
 			this.route = route;

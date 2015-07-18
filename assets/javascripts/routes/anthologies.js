@@ -4,12 +4,15 @@ define([
 	'collections/anthology_collection',
 	'views/anthology/anthologies_view',
 	'models/anthology',
-	'dispatcher'
-], function(AnthologyCollection, AnthologiesView, Anthology, AppDispatcher) {
+	'postal'
+], function(AnthologyCollection, AnthologiesView, Anthology, postal) {
 	var AnthologiesRoute = function(app) {
 		var fetch_collection = false;
 		
 		app.clearAppCanvas();
+		
+		var channel = {};
+		channel['route'] = postal.channel('route');
 		
 		window.Anthology = Anthology;
 		
@@ -25,16 +28,14 @@ define([
 				$.when(app.anthologiesView.render(app.anthologyList)).done(function() {
 					console.log(app.anthologyList);
 					//app.router.trigger('ready');
-					AppDispatcher.dispatch({actionType: 'route:ready' });
+					channel['route'].publish('ready');
 				});
 			});
 		} else {
 			$.when(app.anthologiesView.render(app.anthologyList)).done(function() {
-				AppDispatcher.dispatch({actionType: 'route:ready' });
+				channel['route'].publish('ready');
 			});
 		}
-		
-		AppDispatcher.dispatch({actionType: 'route:ready' });
 	}
 	
 	return AnthologiesRoute;

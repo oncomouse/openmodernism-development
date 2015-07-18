@@ -2,7 +2,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'dispatcher',
+	'postal',
 	'views/sidebar_view',
 	'utilities/login_manager',
 	'utilities/form_validation',
@@ -11,7 +11,7 @@ define([
 	$,
 	_,
 	Backbone,
-	AppDispatcher,
+	postal,
 	SidebarView,
 	LoginManager,
 	FormValidation
@@ -36,24 +36,34 @@ define([
 					break;
 			}
 		},
+		channel: {},
 		// Initialization code to run every time a route is rendered (similar to $(document).ready on a normal web page):
 		initialize: function(options) {
 			options || (options = {});
 			
 			this.context = options.context;
 			
+			this.channel['route'] = postal.channel('route');
+			
+			this.channel['route'].subscribe('ready', _.bind(function(data, envelope) {
+				this.routeReady();
+			}, this));
+			
+			this.channel['route'].subscribe('change', _.bind(function(data, envelope) {
+				require(['routes/'+data.route], _.bind(function(route) {
+					route(this.context, data.params);
+				}, this));
+			}, this));
+			
 			_.each(this.routes, function(val, key) {
 				if (key == '') { return; }
 				this.on('route:' + val, function(params) {
-					AppDispatcher.dispatch({
-						actionType: 'route',
+					this.channel['route'].publish('change',{
 						params: params,
 						route: val
 					});
 				});
 			}, this);
-			
-			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
 			
 			this.sidebar = new SidebarView();
 			this.login_manager = new LoginManager();

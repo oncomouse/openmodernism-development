@@ -4,9 +4,9 @@ define([
 	'jquery',
 	'backbone',
 	'jst',
-	'dispatcher',
+	'postal',
 	'bootstrap/modal'
-], function($,Backbone,JST,AppDispatcher) {
+], function($,Backbone,JST,postal) {
 	var LoginLinkView = Backbone.View.extend({
 		tagName: 'li',
 		attributes: {
@@ -21,12 +21,14 @@ define([
 			return this;
 		},
 		initialize: function() {
-			
-			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
-			
 			$('nav .collapse ul.navbar-right').append(
 				this.render().el
 			);
+			this.channel = {};
+			this.channel['login'] = postal.channel('login');
+			this.channel['login'].subscribe('change', _.bind(function(data, envelope) {
+				this.render();
+			}, this));
 		},
 		dispatchCallback: function(payload) {
 			switch(payload.actionType) {

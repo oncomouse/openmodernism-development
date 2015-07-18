@@ -3,13 +3,14 @@
 define([
 	'views/login/login_view',
 	'views/login/login_link_view',
+	//'components/login/login_link',
 	'utilities/alert_manager',
-	'dispatcher'
+	'postal'
 ], function(
 	LoginView,
 	LoginLinkView,
 	AlertManager,
-	AppDispatcher
+	postal
 ){
 	var LoginManager = Backbone.Model.extend({
 		initialize: function() {
@@ -19,17 +20,39 @@ define([
 			this.login_view.render();
 			this.login_link_view.render();
 			
-			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
+			//this.login_link = new LoginLinkComponent;
+			
+			this.channel = {};
+			this.channel['login'] = postal.channel('login');
+			this.channel['component'] = postal.channel('component');
+			
+			this.channel['login'].subscribe('submit', _.bind(function(data, envelope) {
+				this.form_submit(data.event);
+			}, this));
+			this.channel['component'].subscribe('register', _.bind(function(data, envelope) {
+				if(data.component == 'LoginLink') {
+					this.authenticate();
+				}
+			},this));
+			
+			this.authenticate();
 			
 		},
 		authenticate: function() {
-			AppDispatcher.dispatch({actionType: 'login:change'});
+			this.channel['login'].publish('change', {loginStatus: false});
+		},
+		authentication_status: function() {
+			return false;
 		},
 		dispatchCallback: function(payload) {
 			switch(payload.actionType) {
-				case 'login.submit':
+				case 'login:submit':
 					this.form_submit(payload.event);
 					break;
+				case 'component:register':
+					if(payload.component == 'LoginLink') {
+						this.authenticate();
+					}
 			}
 		},
 		form_submit: function(ev) {
@@ -78,9 +101,7 @@ define([
 					password: $password_input.val()
 				};
 				
-				AppDispatcher.dispatch({
-					actionType: 'login.submitted'
-				});
+				this.channel['login'].publish('submitted');
 			}
 		},
 		form_submit_create: function() {

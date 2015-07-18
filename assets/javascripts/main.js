@@ -16,7 +16,8 @@ var requirejs_configuration = {
 		'sprintf': 'vendor/sprintf-amd/sprintf-shim',
 		'sprintf-vendor': '../vendor/sprintf/src/sprintf',
 		'writedown': 'vendor/writedown/writedown',
-		'Dispatcher': 'vendor/flux-amd/Flux'
+		'react': '../vendor/react/react',
+		'postal': '../vendor/postal/lib/postal'
 	},
 	shim: {
 		'lodash': {

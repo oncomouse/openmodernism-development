@@ -4,7 +4,6 @@ define([
 	'jquery',
 	'lodash',
 	'backbone',
-	'dispatcher',
 	'lorem',
 	'router',
 	'bootstrap/transition',
@@ -13,7 +12,6 @@ define([
 	$,
 	_,
 	Backbone,
-	AppDispatcher,
 	Lorem,
 	Router
 ){

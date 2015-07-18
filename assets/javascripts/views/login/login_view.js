@@ -5,10 +5,10 @@ define([
 	'underscore',
 	'backbone',
 	'jst',
-	'dispatcher',
+	'postal',
 	'utilities/form_validation',
 	'bootstrap/modal'
-], function($,_,Backbone,JST,AppDispatcher,FormValidation) {
+], function($,_,Backbone,JST,postal,FormValidation) {
 	var LoginView = Backbone.View.extend({
 		el: 'body',
 		template: JST['login/login_modal'],
@@ -20,7 +20,11 @@ define([
 			// and load the default pane:
 			this.load_pane_template('login-form');
 			
-			this.dispatchToken = AppDispatcher.register(_.bind(this.dispatchCallback, this));
+			this.channel = {};
+			this.channel['login'] = postal.channel('login');
+			this.channel['login'].subscribe('submitted', _.bind(function(data, envelope) {
+				this.remove_modal();
+			}, this));
 			
 			// If the LoginModal starts to close, clear it's contents:
 			$('#LoginModal').on('hide.bs.modal', _.bind(this.clean_modal, this));
@@ -82,8 +86,7 @@ define([
 			ev.preventDefault();
 
 			// Signal to the LoginManager that we have a form submission:
-			AppDispatcher.dispatch({
-				actionType: 'login:submit',
+			this.channel['login'].publish('submit', {
 				event: ev
 			});
 			
