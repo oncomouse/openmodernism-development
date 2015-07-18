@@ -33,13 +33,6 @@ define([
 			this.$el.append(this.template());
 			return this;
 		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'login:submitted':
-					this.remove_modal();
-					break;
-			}
-		},
 		clean_modal: function() {
 			if ($('#LoginModal form').attr('action') != '#login-form') { this.load_pane_template('login-form'); }
 			$('#LoginModal input').val('');

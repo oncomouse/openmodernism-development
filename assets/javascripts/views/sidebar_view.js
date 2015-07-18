@@ -32,16 +32,6 @@ define([
 		changeRoute: function(route) {
 			this.route = route;
 		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'route:ready':
-					this.render();
-					break;
-				case 'route':
-					this.changeRoute(payload.route);
-					break;
-			}
-		},
 		render: function() {
 			if(this.route in this.routesWeCareAbout) {
 				$('.sidebar').html(this.routesWeCareAbout[this.route]());

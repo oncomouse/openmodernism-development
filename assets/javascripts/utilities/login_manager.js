@@ -2,25 +2,25 @@
 
 define([
 	'views/login/login_view',
-	'views/login/login_link_view',
-	//'components/login/login_link',
+	//'views/login/login_link_view',
+	'components/login/login_link',
 	'utilities/alert_manager',
 	'postal'
 ], function(
 	LoginView,
-	LoginLinkView,
+	LoginLinkComponent,
 	AlertManager,
 	postal
 ){
 	var LoginManager = Backbone.Model.extend({
 		initialize: function() {
 			this.login_view = new LoginView({model: this});
-			this.login_link_view = new LoginLinkView({model: this});
+			//this.login_link_view = new LoginLinkView({model: this});
 			
 			this.login_view.render();
-			this.login_link_view.render();
+			//this.login_link_view.render();
 			
-			//this.login_link = new LoginLinkComponent;
+			this.login_link = new LoginLinkComponent;
 			
 			this.channel = {};
 			this.channel['login'] = postal.channel('login');
@@ -34,6 +34,9 @@ define([
 					this.authenticate();
 				}
 			},this));
+			this.channel['login'].subscribe('show-modal', function(data, envelope) {
+				$('#LoginModal').modal('show');
+			})
 			
 			this.authenticate();
 			
@@ -43,17 +46,6 @@ define([
 		},
 		authentication_status: function() {
 			return false;
-		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'login:submit':
-					this.form_submit(payload.event);
-					break;
-				case 'component:register':
-					if(payload.component == 'LoginLink') {
-						this.authenticate();
-					}
-			}
 		},
 		form_submit: function(ev) {
 			var class_name;

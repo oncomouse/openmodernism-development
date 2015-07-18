@@ -24,25 +24,13 @@ define([
 			
 			FormValidation.setup();
 		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'route:ready':
-					this.routeReady();
-					break;
-				case 'route':
-					require(['routes/'+payload.route], _.bind(function(route) {
-						route(this.context, payload.params);
-					}, this));
-					break;
-			}
-		},
-		channel: {},
 		// Initialization code to run every time a route is rendered (similar to $(document).ready on a normal web page):
 		initialize: function(options) {
 			options || (options = {});
 			
 			this.context = options.context;
-			
+		
+			this.channel = {};
 			this.channel['route'] = postal.channel('route');
 			
 			this.channel['route'].subscribe('ready', _.bind(function(data, envelope) {

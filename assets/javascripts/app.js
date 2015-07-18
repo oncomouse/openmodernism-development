@@ -36,6 +36,11 @@ define([
 			app.router = new Router({routes: app.routes, context: app});
 
 			if (DEBUG) {
+				require([
+					'postal.diagnostics'
+				], function(DiagnosticsWireTap) {
+					
+				});
 				app.router.on('all', function(route, params) {
 					console.log('Route', arguments);
 				});

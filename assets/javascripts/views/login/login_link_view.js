@@ -30,13 +30,6 @@ define([
 				this.render();
 			}, this));
 		},
-		dispatchCallback: function(payload) {
-			switch(payload.actionType) {
-				case 'login:change':
-					this.render();
-					break;
-			}
-		},
 		show_modal: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
