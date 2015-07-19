@@ -1,1 +1,0 @@
-<a href="#/anthology/<%= model.id %>"><%= model.get('title') %></a>

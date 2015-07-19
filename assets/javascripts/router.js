@@ -4,7 +4,6 @@ define([
 	'backbone',
 	'postal',
 	'react',
-	'views/sidebar_view',
 	'utilities/login_manager',
 	'utilities/form_validation',
 	'jquery-ui/effect-blind'
@@ -14,7 +13,6 @@ define([
 	Backbone,
 	postal,
 	React,
-	SidebarView,
 	LoginManager,
 	FormValidation
 ){
@@ -59,7 +57,6 @@ define([
 				});
 			}, this);
 			
-			//this.sidebar = new SidebarView();
 			this.login_manager = new LoginManager();
 			
 

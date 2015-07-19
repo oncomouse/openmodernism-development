@@ -1,22 +1,18 @@
 'use strict';
 
 define([
-	'views/login/login_view',
-	//'views/login/login_link_view',
+	'postal',
 	'components/login/login_link',
-	'components/login/login_modal',
-	'utilities/alert_manager',
-	'postal'
+	'components/login/login_modal'
 ], function(
-	LoginView,
+	postal,
 	LoginLinkComponent,
-	LoginModalComponent,
-	AlertManager,
-	postal
+	LoginModalComponent
 ){
 	var LoginManager = Backbone.Model.extend({
-		initialize: function() {			
-			this.login_link = new LoginLinkComponent;
+		initialize: function() {
+			
+			this.login_link = new LoginLinkComponent;			
 			this.login_modal = new LoginModalComponent;
 			
 			this.channel = {};
