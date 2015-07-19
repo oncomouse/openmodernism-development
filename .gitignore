@@ -8,4 +8,5 @@ log
 .sass-cache
 .DS_Store
 assets-clean_copy
+app.build.js
 Gemfile.lock
