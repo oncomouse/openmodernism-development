@@ -35,7 +35,7 @@ define([
 			// Generate the router:
 			app.router = new Router({routes: app.routes, context: app});
 
-			if (DEBUG) {
+			if (window.development && DEBUG) {
 				require([
 					'postal.diagnostics'
 				], function(DiagnosticsWireTap) {
