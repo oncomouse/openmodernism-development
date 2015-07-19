@@ -2,12 +2,14 @@
 
 define([
 	'jquery',
+	'lodash',
 	'collections/document_collection',
 	'components/document/documents',
 	'postal',
 	'react'
 ], function(
 	$,
+	_,
 	DocumentCollection,
 	Documents,
 	postal,
@@ -19,22 +21,16 @@ define([
 		var channel = {};
 		channel['route'] = postal.channel('route');
 	
-		if(!('documentList' in app)) {
+		if(!_.has(app,'documentList')) {
 			fetch_collection = true;
 			app.documentList = new DocumentCollection();
 		}
-		/*if(!('documentsView' in app)) {
-			app.documentsView = new DocumentsView();
-		}*/
 		if(fetch_collection) {
 			app.documentList.fetch().then(function() { 
 				React.render(React.createElement(Documents, {collection: app.documentList}), $('#app').get(0));
 				channel['route'].publish('ready');
 			});
 		} else {
-			/*$.when(app.documentsView.render(app.documentList)).done(function() {
-				channel['route'].publish('ready');
-			});*/
 			React.render(React.createElement(Documents, {collection: app.documentList}), $('#app').get(0));
 			channel['route'].publish('ready');
 		}
