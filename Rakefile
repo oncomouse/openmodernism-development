@@ -64,19 +64,19 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:generate_polyfill", "assets:make_app_build_js", "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
+	task :pack => ["assets:make_app_build_js", "assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:generate_polyfill",  "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
 		puts "Running task assets:run_r_js"
-		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
+		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy dir=public mainConfigFile=assets-clean_copy/javascripts/main.js")
 		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
 	end
 	
 	task :make_app_build_js do
 		require 'json'
-		config = JSON.parse(File.read('assets/javascripts/main.js').gsub(/(\t|\n)/,'').split('var requirejs_configuration = ')[1].split(';')[0].gsub('JAVASCRIPT_DIR', "'/javascripts'").gsub("'",'"'))
+		config = JSON.parse(File.read('assets/javascripts/main.js').gsub(/(\t|\n)/,'').split('var requirejs_configuration = ')[1].split(';')[0].gsub('JAVASCRIPT_DIR', "'javascripts'").gsub("'",'"'))
 		config['modules'] = [
 			{
 				'name' => 'main'
@@ -90,11 +90,12 @@ namespace :assets do
 				'exclude' => ['main']
 			}
 		]
-
-		config['optimize'] = 'uglify'
+		config['appDir'] = './assets'
+		config['dir'] = './public'
 		config['skipDirOptimize'] = true
 		File.open('app.build.js', 'w') do |json_fp|
-			json_fp.write(JSON.pretty_generate(config))
+			#json_fp.write("{\"dir\": \"./public\",")
+			json_fp.write(JSON.pretty_generate(config))#.gsub(/^\{/,""))
 		end
 	end
 	
