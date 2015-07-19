@@ -9,8 +9,6 @@ define([
 	var AnthologiesRoute = function(app) {
 		var fetch_collection = false;
 		
-		app.clearAppCanvas();
-		
 		var channel = {};
 		channel['route'] = postal.channel('route');
 		

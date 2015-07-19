@@ -15,7 +15,6 @@ define([
 	var DocumentRoute = function(app, id) {
 		var currentDocument = {};
 	
-		app.clearAppCanvas();
 		var channel = {};
 		channel['route'] = postal.channel('route');
 		channel['component'] = postal.channel('component');

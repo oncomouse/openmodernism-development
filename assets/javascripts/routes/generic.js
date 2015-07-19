@@ -7,7 +7,6 @@ define([
 	postal
 ) {
 	var GenericRoute = function(app) {
-		app.clearAppCanvas();
 		
 		var channel = {};
 		channel['route'] = post.channel('route');
