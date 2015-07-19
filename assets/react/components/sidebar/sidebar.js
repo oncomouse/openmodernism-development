@@ -2,12 +2,14 @@ define([
 	'lodash',
 	'react',
 	'mixins/publish-component-mount/PublishComponentMountMixin',
-	'components/sidebar/routes/documents'
+	'components/sidebar/routes/documents',
+	'components/sidebar/routes/anthologies'
 ], function (
 	_,
 	React,
 	PublishComponentMountMixin,
-	SidebarDocuments
+	SidebarDocuments,
+	SidebarAnthologies
 ) {
 	var Sidebar = React.createClass({
 		mixins: [
@@ -15,7 +17,8 @@ define([
 			PublishComponentMountMixin
 		],
 		routes: {
-			'documents': SidebarDocuments
+			'documents': SidebarDocuments,
+			'anthologies': SidebarAnthologies
 		},
 		getDefaultProps: function() {
 			return {
