@@ -15,7 +15,7 @@ module Sinatra::JsxSupport
 			last_modified File.mtime(fname)
 			cache_control :public, :must_revalidate, :max_age => settings.js_max_age
 
-			Babel::Transpiler.transform File.read(fname)
+			Babel::Transpiler.transform(File.read(fname))['code']
 		end
 	end
 end
