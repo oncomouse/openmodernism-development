@@ -13,10 +13,9 @@ define([
 			this.channel['route'] = postal.channel('route');
 			this.channel['route'].subscribe('ready', _.bind(function(data, envelope) {
 				if(!this.isMounted()){
-					React.render(
-						<LoginLink />,
-						$('nav .collapse ul.navbar-right').get(0)
-					);
+					if(typeof this.mountComponent === 'function') {
+						this.mountComponent();
+					}
 				}
 			}, this));
 		}

@@ -27,7 +27,11 @@ define([
 				loginStatus: false
 			}
 		},
-		componentDidMount: function () {			
+		mountComponent: function() {
+			React.render(
+				<LoginLink />,
+				$('nav .collapse ul.navbar-right').get(0)
+			);
 		},
 		clickLogin: function(ev) {
 			ev.stopPropagation();
