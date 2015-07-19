@@ -29,14 +29,14 @@ define([
 			this.channel['login'].subscribe('submit', _.bind(function(data, envelope) {
 				this.form_submit(data.event);
 			}, this));
+			this.channel['login'].subscribe('show-modal', function(data, envelope) {
+				$('#LoginModal').modal('show');
+			});
 			this.channel['component'].subscribe('register', _.bind(function(data, envelope) {
 				if(data.component == 'LoginLink') {
 					this.authenticate();
 				}
 			},this));
-			this.channel['login'].subscribe('show-modal', function(data, envelope) {
-				$('#LoginModal').modal('show');
-			})
 			
 			this.authenticate();
 			
