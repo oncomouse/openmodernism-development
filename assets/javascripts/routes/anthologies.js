@@ -1,40 +1,39 @@
 'use strict';
 
 define([
+	'jquery',
+	'lodash',
 	'collections/anthology_collection',
-	'views/anthology/anthologies_view',
-	'models/anthology',
-	'postal'
-], function(AnthologyCollection, AnthologiesView, Anthology, postal) {
+	'components/anthology/anthologies',
+	'postal',
+	'react'
+], function(
+	$,
+	_,
+	AnthologyCollection,
+	Anthologies,
+	postal,
+	React
+) {
 	var AnthologiesRoute = function(app) {
 		var fetch_collection = false;
 		
 		var channel = {};
 		channel['route'] = postal.channel('route');
-		
-		window.Anthology = Anthology;
-		
-		if(!('anthologyList' in app)) {
+	
+		if(!_.has('anthologyList', app))) {
 			fetch_collection = true;
-			app.anthologyList = new AnthologyCollection();
-		}
-		if(!('anthologiesView' in app)) {
-			app.anthologiesView = new AnthologiesView();
+			app.anthologytList = new AnthologyCollection();
 		}
 		if(fetch_collection) {
-			app.anthologyList.fetch().then(function() { 
-				$.when(app.anthologiesView.render(app.anthologyList)).done(function() {
-					console.log(app.anthologyList);
-					//app.router.trigger('ready');
-					channel['route'].publish('ready');
-				});
-			});
-		} else {
-			$.when(app.anthologiesView.render(app.anthologyList)).done(function() {
+			app.anthologytList.fetch().then(function() { 
+				React.render(React.createElement(Anthologies, {collection: app.anthologytList}), $('#app').get(0));
 				channel['route'].publish('ready');
 			});
+		} else {
+			React.render(React.createElement(Anthologies, {collection: app.anthologytList}), $('#app').get(0));
+			channel['route'].publish('ready');
 		}
 	}
-	
 	return AnthologiesRoute;
 });
