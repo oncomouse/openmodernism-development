@@ -3,6 +3,7 @@ define([
 	'underscore',
 	'backbone',
 	'postal',
+	'react',
 	'views/sidebar_view',
 	'utilities/login_manager',
 	'utilities/form_validation',
@@ -12,6 +13,7 @@ define([
 	_,
 	Backbone,
 	postal,
+	React,
 	SidebarView,
 	LoginManager,
 	FormValidation
@@ -38,6 +40,9 @@ define([
 			}, this));
 			
 			this.channel['route'].subscribe('change', _.bind(function(data, envelope) {
+				
+				React.unmountComponentAtNode($('#app').get(0));
+				
 				require(['routes/'+data.route], _.bind(function(route) {
 					route(this.context, data.params);
 				}, this));
