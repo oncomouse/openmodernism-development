@@ -21,7 +21,7 @@ define([
 		var channel = {};
 		channel['route'] = postal.channel('route');
 	
-		if(!_.has('anthologyList', app))) {
+		if(!_.has('anthologyList', app)) {
 			fetch_collection = true;
 			app.anthologytList = new AnthologyCollection();
 		}
