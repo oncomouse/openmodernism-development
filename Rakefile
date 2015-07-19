@@ -9,7 +9,7 @@ require 'dm-migrations'
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
 	/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
-	/javascripts\/(vendor|models|collections|views|utilities|jst.js|site.js|app.js|dispatcher.js|router.js)/, # Skip all written JavaScript except the routes/
+	/javascripts\/(components|mixins|vendor|models|collections|views|utilities|jst.js|site.js|app.js|dispatcher.js|router.js)/, # Skip all written JavaScript except the routes/
 	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
 	/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
 	/compass\.config\.rb/, # Don't upload build files
