@@ -52,6 +52,9 @@ define([
 	
 	
 	var LoginButton = React.createClass({
+		mixins: [
+			React.addons.PureRenderMixin,
+		],
 		render: function() {
 			return (
 				<li><a href="#" id="LoginLink" onClick={this.props.onClick}>Login</a></li>
@@ -60,6 +63,9 @@ define([
 	});
 	
 	var LogoutButton = React.createClass({
+		mixins: [
+			React.addons.PureRenderMixin,
+		],
 		render: function() {
 			return (
 				<li><a href="#" id="LoginLink" onClick={this.props.onClick}>Logout</a></li>
