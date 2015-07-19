@@ -16,7 +16,7 @@ var requirejs_configuration = {
 		'sprintf': 'vendor/sprintf-amd/sprintf-shim',
 		'sprintf-vendor': '../vendor/sprintf/src/sprintf',
 		'writedown': 'vendor/writedown/writedown',
-		'react': '../vendor/react/react',
+		'react': '../vendor/react/react-with-addons',
 		'postal': '../vendor/postal/lib/postal',
 		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics'
 	},
