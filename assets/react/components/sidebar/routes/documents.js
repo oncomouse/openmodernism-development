@@ -3,7 +3,7 @@ define([
 ], function(
 	React
 ) {
-	var SidebarDocument = React.createClass({
+	var SidebarDocuments = React.createClass({
 		mixins: [
 			React.addons.PureRenderMixin
 		],
@@ -14,5 +14,5 @@ define([
 		}
 	});
 	
-	return SidebarDocument;
+	return SidebarDocuments;
 })
