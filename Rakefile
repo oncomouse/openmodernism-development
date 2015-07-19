@@ -16,6 +16,7 @@ EXCLUDES = [
 	/app\.build\.js/, # Don't upload build files
 	/README\.md/,
 	/build\.txt/,
+	/jsx_support.rb/,
 	/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
 	/development\.sqlite/, # Don't upload the development DB file
 	/ui\/(i18n|minified)/ # We don't need this anymore, but they match for jquery-ui files
@@ -93,6 +94,7 @@ namespace :assets do
 		config['appDir'] = './assets'
 		config['dir'] = './public'
 		config['skipDirOptimize'] = true
+		config['optimize'] = 'none'
 		File.open('app.build.js', 'w') do |json_fp|
 			#json_fp.write("{\"dir\": \"./public\",")
 			json_fp.write(JSON.pretty_generate(config))#.gsub(/^\{/,""))
