@@ -3,7 +3,7 @@ define([
 	'lodash',
 	'react',
 	'postal',
-	'mixins/route-archiecture/RouteArchitectureMixin'
+	'mixins/route-architecture/RouteArchitectureMixin',
 ], function(
 	$,
 	_,
