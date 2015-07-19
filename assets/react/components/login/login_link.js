@@ -2,31 +2,25 @@ define([
 	'jquery',
 	'lodash',
 	'react',
-	'postal'
+	'postal',
+	'mixins/route-archiecture/RouteArchitectureMixin'
 ], function(
 	$,
 	_,
 	React,
-	postal
+	postal,
+	RouteArchitectureMixin
 ) {
 	var LoginLink = React.createClass({
+		mixins: [
+			React.addons.PureRenderMixin,
+			RouteArchitectureMixin
+		],
 		getInitialState: function() {
-			this.channel = {};
 			this.channel['login'] = postal.channel('login');
-			this.channel['route'] = postal.channel('route');
 			this.channel['login'].subscribe('change', _.bind(function(data, envelope) {
 				if (this.isMounted()){
 					this.setState({loginStatus: payload.loginStatus});
-					this.render();
-				}
-			}, this));
-			this.channel['route'].subscribe('ready', _.bind(function(data, envelope) {
-				if(!this.isMounted()){
-					React.render(
-						<LoginLink />,
-						$('nav .collapse ul.navbar-right').get(0)
-					);
-					//this.setState({rendered: true});
 				}
 			}, this));
 			return {
@@ -40,14 +34,19 @@ define([
 			ev.preventDefault();
 			this.channel['login'].publish('show-modal',{});
 		},
+		clickLogout: function(ev) {
+			ev.stopPropagation();
+			ev.preventDefault();
+			this.channel['login'].publish('logout-request',{});
+		},
 		render: function() {
 			var loginButton = <LoginButton onClick={this.clickLogin}/>;
 			if(this.state.loginStatus) {
-				loginButton = <LogoutButton onClick={function() {}}/>;
+				loginButton = <LogoutButton onClick={this.clickLogout}/>;
 			}
-			return (<li>
-				{loginButton}
-			</li>);
+			return (
+				loginButton
+			);
 		}
 	});
 	
@@ -55,7 +54,7 @@ define([
 	var LoginButton = React.createClass({
 		render: function() {
 			return (
-				<a href="#" id="LoginLink" onClick={this.props.onClick}>Login</a>
+				<li><a href="#" id="LoginLink" onClick={this.props.onClick}>Login</a></li>
 			)
 		}
 	});
@@ -63,7 +62,7 @@ define([
 	var LogoutButton = React.createClass({
 		render: function() {
 			return (
-				<a href="#" id="LoginLink" onClick={this.props.onClick}>Logout</a>
+				<li><a href="#" id="LoginLink" onClick={this.props.onClick}>Logout</a></li>
 			)
 		}
 	})
