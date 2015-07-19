@@ -4,6 +4,7 @@ define([
 	'react',
 	'postal',
 	'mixins/route-architecture/RouteArchitectureMixin',
+	'mixins/publish-component-mount/PublishComponentMountMixin',
 	'utilities/form_validation',
 	'bootstrap/modal'
 ], function(
@@ -12,12 +13,14 @@ define([
 	React,
 	postal,
 	RouteArchitectureMixin,
+	PublishComponentMountMixin,
 	FormValidation
 ) {
 	var LoginModal = React.createClass({
 		mixins: [
 			React.addons.PureRenderMixin,
-			RouteArchitectureMixin
+			RouteArchitectureMixin,
+			PublishComponentMountMixin
 		],
 		getInitialState: function() {
 			if(typeof this.channel !== 'object') {

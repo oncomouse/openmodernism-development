@@ -4,17 +4,20 @@ define([
 	'react',
 	'postal',
 	'mixins/route-architecture/RouteArchitectureMixin',
+	'mixins/publish-component-mount/PublishComponentMountMixin'
 ], function(
 	$,
 	_,
 	React,
 	postal,
-	RouteArchitectureMixin
+	RouteArchitectureMixin,
+	PublishComponentMountMixin
 ) {
 	var LoginLink = React.createClass({
 		mixins: [
 			React.addons.PureRenderMixin,
-			RouteArchitectureMixin
+			RouteArchitectureMixin,
+			PublishComponentMountMixin
 		],
 		getInitialState: function() {
 			this.channel['login'] = postal.channel('login');
