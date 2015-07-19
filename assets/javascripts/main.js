@@ -2,9 +2,9 @@
 
 var JAVASCRIPT_DIR = '/javascripts';
 var requirejs_configuration = {
-	baseUrl: JAVASCRIPT_DIR,
+	'baseUrl': JAVASCRIPT_DIR,
 
-	paths: {
+	'paths': {
 		'backbone': '../vendor/backbone/backbone',
 		'bootstrap': '../vendor/bootstrap-sass-official/assets/javascripts/bootstrap',
 		'citeproc': 'vendor/citeproc-amd',
@@ -20,38 +20,38 @@ var requirejs_configuration = {
 		'postal': '../vendor/postal/lib/postal',
 		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics'
 	},
-	shim: {
+	'shim': {
 		'lodash': {
-			exports: '_'
+			'exports': '_'
 		},
 		'jquery-ui': {
-			deps: ['jquery'],
-			exports: '$'
+			'deps': ['jquery'],
+			'exports': '$'
 		},
 		'jst': {
-			exports: 'JST'
+			'exports': 'JST'
 		},
 		'lorem': {
-			exports: 'Lorem'
+			'exports': 'Lorem'
 		},
 		'sprintf': {
-			exports: 'sprintf'
+			'exports': 'sprintf'
 		},
 
-		'bootstrap/affix':      { deps: ['jquery'], exports: '$.fn.affix' }, 
-		'bootstrap/alert':      { deps: ['jquery'], exports: '$.fn.alert' },
-		'bootstrap/button':     { deps: ['jquery'], exports: '$.fn.button' },
-		'bootstrap/carousel':   { deps: ['jquery'], exports: '$.fn.carousel' },
-		'bootstrap/collapse':   { deps: ['jquery'], exports: '$.fn.collapse' },
-		'bootstrap/dropdown':   { deps: ['jquery'], exports: '$.fn.dropdown' },
-		'bootstrap/modal':      { deps: ['jquery'], exports: '$.fn.modal' },
-		'bootstrap/popover':    { deps: ['jquery'], exports: '$.fn.popover' },
-		'bootstrap/scrollspy':  { deps: ['jquery'], exports: '$.fn.scrollspy' },
-		'bootstrap/tab':        { deps: ['jquery'], exports: '$.fn.tab'        },
-		'bootstrap/tooltip':    { deps: ['jquery'], exports: '$.fn.tooltip' },
-		'bootstrap/transition': { deps: ['jquery'], exports: '$.fn.transition' }
+		'bootstrap/affix':      { 'deps': ['jquery'], 'exports': '$.fn.affix' }, 
+		'bootstrap/alert':      { 'deps': ['jquery'], 'exports': '$.fn.alert' },
+		'bootstrap/button':     { 'deps': ['jquery'], 'exports': '$.fn.button' },
+		'bootstrap/carousel':   { 'deps': ['jquery'], 'exports': '$.fn.carousel' },
+		'bootstrap/collapse':   { 'deps': ['jquery'], 'exports': '$.fn.collapse' },
+		'bootstrap/dropdown':   { 'deps': ['jquery'], 'exports': '$.fn.dropdown' },
+		'bootstrap/modal':      { 'deps': ['jquery'], 'exports': '$.fn.modal' },
+		'bootstrap/popover':    { 'deps': ['jquery'], 'exports': '$.fn.popover' },
+		'bootstrap/scrollspy':  { 'deps': ['jquery'], 'exports': '$.fn.scrollspy' },
+		'bootstrap/tab':        { 'deps': ['jquery'], 'exports': '$.fn.tab'        },
+		'bootstrap/tooltip':    { 'deps': ['jquery'], 'exports': '$.fn.tooltip' },
+		'bootstrap/transition': { 'deps': ['jquery'], 'exports': '$.fn.transition' }
 	},
-	map: {
+	'map': {
 		'*': {
 			'underscore': 'lodash'
 		}
