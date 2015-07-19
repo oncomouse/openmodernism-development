@@ -18,13 +18,9 @@ define([
 			PublishComponentMountMixin
 		],
 		propTypes: {
-			model: function(props, propName, componentName) { return typeof props[propName].get === 'function' && typeof props[propName].set === 'function'; } /* Best we can do to check that model is a Backbone Model */
+			model: function(props, propName, componentName) { return (_.has(props, propName) && typeof props[propName].get === 'function' && typeof props[propName].set === 'function'); } /* Best we can do to check that model is a Backbone Model */
 		},
 		render: function() {
-			if(this.props.model === null) {
-				return (<div></div>);
-			}
-			
 			return(
 				<div className="row">
 					<section id="currentDocument" className="document col-md-10 center-block">
