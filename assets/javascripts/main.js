@@ -58,6 +58,12 @@ var requirejs_configuration = {
 	}
 };
 
+if (!String.prototype.includes) {
+  String.prototype.includes = function() {'use strict';
+    return String.prototype.indexOf.apply(this, arguments) !== -1;
+  };
+}
+
 (function(factory) {
 	if (typeof window.development !== 'undefined') {
 		// This has to do with the way sinatra/assetpack does cache busting and will only
@@ -68,7 +74,7 @@ var requirejs_configuration = {
 			var extra_paths = {};
 			jQuery.each(data.responseText.split('\n'), function(i,script) {
 				script = script.replace(/<script src=\'/,'').replace(/'><\/script>/,'').replace(/\.js$/,'');
-				if(!script.match(script_dir_re) || script.contains('vendor')) {
+				if(!script.match(script_dir_re) || script.includes('vendor')) {
 					return;
 				}
 				script = script.replace(script_dir_re, '');
