@@ -12,6 +12,7 @@ class App < Sinatra::Base
 		
 		register Sinatra::JsxSupport
 		serve_jsx '/javascripts/components', :from => 'assets/react/components'
+		serve_jsx '/javascripts/mixins', :from => 'assets/react/mixins'
 	
 		Compass.configuration do |config|
 			config.sass_dir         = "assets/stylesheets"

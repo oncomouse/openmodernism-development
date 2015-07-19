@@ -77,10 +77,14 @@ namespace :assets do
 	task :compile_react do
 		require 'babel/transpiler'
 		puts "Running task assets:compile_react"
-		system "mkdir -p assets-clean_copy/javascripts/components/"
-		Dir.glob('assets/react/components/**.js').each do |react_file|
-			react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/')
-			File.open(react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/'), 'w') do |fp|
+		#system "mkdir -p assets-clean_copy/javascripts/components/"
+		Dir.glob('assets/react/**/*.js').each do |react_file|
+			new_file = react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/')
+			puts new_file
+			if not File.exists? File.dirname(new_file)
+				system "mkdir -p #{File.dirname(new_file)}"
+			end
+			File.open(new_file, 'w') do |fp|
 				fp.write Babel::Transpiler.transform(File.read(react_file))['code'].gsub(/\\n/,"\n").gsub(/\\t/,"\t")
 			end
 		end
