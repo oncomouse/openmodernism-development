@@ -2,11 +2,14 @@
 
 define([
 	'models/document',
-	'views/document/document_view',
+	//'views/document/document_view',
+	'components/document/document',
+	'react',
 	'postal'
 ], function(
 	Document,
-	DocumentView,
+	DocumentComponent,
+	React,
 	postal
 ) {
 	var DocumentRoute = function(app, id) {
@@ -15,18 +18,17 @@ define([
 		app.clearAppCanvas();
 		var channel = {};
 		channel['route'] = postal.channel('route');
+		channel['component'] = postal.channel('component');
 	
 		// Detect if it is possible to extract the document from a preexisting documentList instance:
 		if (typeof app.documentList !== 'undefined') {
 			currentDocument = app.documentList.get(parseInt(id));
-			app.currentDocumentView = new DocumentView(currentDocument);
-			app.currentDocumentView.render();
+			React.render(React.createElement(DocumentComponent, {model: currentDocument}), $('#app').get(0));
 			channel['route'].publish('ready');
 		} else {
 			currentDocument = new Document({'id': id});
 			currentDocument.fetch().then(function() {
-				app.currentDocumentView = new DocumentView(currentDocument);
-				app.currentDocumentView.render();
+				React.render(React.createElement(DocumentComponent, {model: currentDocument}), $('#app').get(0));
 				channel['route'].publish('ready');
 			});
 		}
