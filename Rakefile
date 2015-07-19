@@ -64,7 +64,7 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:run_r_js", "assets:generate_polyfill", "assets:uglify", "assets:compile_css"] #
+	task :pack => ["assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:generate_polyfill", "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
@@ -113,8 +113,8 @@ namespace :assets do
 			'/vendor/css3-mediaqueries-js/css3-mediaqueries.js',
 			'/vendor/html5shiv/dist/html5shiv.js'
 		]
-		system "mkdir -p public/javascripts"
-		File.open('public/javascripts/polyfill.js', 'w') do |poly_fp|
+		system "mkdir -p assets-clean_copy/javascripts"
+		File.open('assets-clean_copy/javascripts/polyfill.js', 'w') do |poly_fp|
 			polyfill.each do |p|
 				poly_fp.write(IO.read "assets/#{p}")
 			end
