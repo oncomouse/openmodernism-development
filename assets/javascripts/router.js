@@ -42,6 +42,7 @@ define([
 			this.channel['route'].subscribe('change', _.bind(function(data, envelope) {
 				
 				React.unmountComponentAtNode($('#app').get(0));
+				$('#app').html('').append('<h1 class="state-loading text-center">Loading</h1>');
 				
 				require(['routes/'+data.route], _.bind(function(route) {
 					route(this.context, data.params);

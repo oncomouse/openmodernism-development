@@ -108,6 +108,13 @@ body.loaded {
 	}
 }
 
+.state-loading {
+	padding: {
+		bottom: 30vh;
+		top: 30vh;
+	}
+}
+
 // Error code:
 .has-error {
 	.error-msg {
