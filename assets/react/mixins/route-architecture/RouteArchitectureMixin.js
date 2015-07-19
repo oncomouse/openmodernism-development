@@ -18,6 +18,8 @@ define([
 					}
 				}
 			}, this));
+			
+			return null;
 		}
 	};
 	
