@@ -1,16 +1,10 @@
 define([
-	'jquery',
 	'lodash',
 	'react',
-	'postal',
-	'mixins/route-architecture/RouteArchitectureMixin',
 	'mixins/publish-component-mount/PublishComponentMountMixin'
 ], function(
-	$,
 	_,
 	React,
-	postal,
-	RouteArchitectureMixin,
 	PublishComponentMountMixin
 ) {
 	var Document = React.createClass({
