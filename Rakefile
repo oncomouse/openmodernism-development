@@ -2,6 +2,14 @@
 APP_FILE  = 'app.rb'
 APP_CLASS = 'App'
 
+# Deployment
+
+DEPLOYMENT = {
+	:directory => "/home/eschaton/www/openmodernism.pilsch.com/current",
+	:server => "copland.dreamhost.com",
+	:user => "eschaton"
+}
+
 #require 'sinatra/assetpack/rake'
 require 'dm-migrations'
 
@@ -44,8 +52,8 @@ task :deploy => "assets:pack" do
 	directories_made = [] # Cachce directories we create on the server
 	
 	# Use SSHKit to connect to the server:
-	on 'eschaton@copland.dreamhost.com' do
-		within "/home/eschaton/www/openmodernism.pilsch.com/current" do
+	on "#{DEPLOYMENT[:user]}@#{DEPLOYMENT[:server]}" do
+		within DEPLOYMENT[:directory] do
 			# Upload the files:
 			Dir.glob('**/*.*').each do |file|
 				next if EXCLUDES.collect{|x| !x.match(file).nil? }.include? true # Exclude any files that match the exclusions
@@ -53,7 +61,7 @@ task :deploy => "assets:pack" do
 					execute :mkdir, '-p', File.dirname(file) if File.dirname(file) != '.'
 					directories_made << File.dirname(file)
 				end
-				upload! file, "/home/eschaton/www/openmodernism.pilsch.com/current/#{File.dirname(file)}"
+				upload! file, "#{DEPLOYMENT[:directory]}/#{File.dirname(file)}"
 			end
 			# Tell Phusion Passenger it needs to restart:
 			execute :mkdir, '-p tmp'
@@ -65,7 +73,7 @@ task :deploy => "assets:pack" do
 end
 
 namespace :assets do
-	task :pack => ["assets:make_app_build_js", "assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:generate_polyfill",  "assets:run_r_js", "assets:uglify", "assets:compile_css"] #
+	task :pack => ["assets:make_app_build_js", "assets:clean_copy", "assets:build_jst", "assets:compile_react", "assets:generate_polyfill",  "assets:run_r_js", "assets:uglify", "assets:compile_css", "assets:clean_public", "assets:copy_requirejs"] #
 	
 	# Run r.js on the clean copy of our assets directory:
 	task :run_r_js do
@@ -73,6 +81,21 @@ namespace :assets do
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy dir=public mainConfigFile=assets-clean_copy/javascripts/main.js")
 		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
 		system ('rm -r assets-clean_copy')
+	end
+	
+	task :clean_public do
+		Dir.glob('public/**/*').each do |file|
+			next if not EXCLUDES.collect{|x| !x.match(file).nil? }.include? true # Skip the good files.
+			File.delete(file) if not File.directory? file
+		end
+		
+		# Fix this:
+		Dir.glob("public/**/*").select{ |d| File.directory? d}.select{ |d| (Dir.entries(d) - %w[.. .]).empty?}.each{ |d| Dir.rmdir d }
+	end
+	
+	task :copy_requirejs do
+		system("mkdir -p public/vendor/requirejs")
+		system("cp assets/vendor/requirejs/require.js public/vendor/requirejs")
 	end
 	
 	task :make_app_build_js do
