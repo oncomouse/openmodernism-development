@@ -9,17 +9,22 @@ This app uses route files to handle interaction between the main app context (`a
 Here is a generic route file. Change the name of the library name and the `return` statement, then add your content:
 
 ```javascript
+'use strict';
+
 define([
+	'postal'
 	// Libraries go here:
 ], function(
-
+	postal
 ) {
 	var GenericRoute = function(app) {
-		app.clearAppCanvas();
+		
+		var channel = {};
+		channel['route'] = post.channel('route');
 		
 		// Your code goes here:
 		
-		app.router.trigger('ready router:ready');
+		channel['route'].dispatch({actionType: 'route:ready' });
 	}
 	return GenericRoute;
 });
@@ -27,17 +32,10 @@ define([
 
 ### Hooking up the route:
 
-In the `assets/javascripts/app.js` file, find the `app.route` object and add the route. For the key, use the route or routes you want the Router to look for. For the value, use the name of the route file you made above.
+In the `assets/javascripts/app.js` file, find the `app.routes` object and add the route. For the key, use the route or routes you want the Router to look for. For the value, use the name of the route file you made above.
 
-### Setting up the build:
+## Deploying
 
-In the `app.build.js` file, you need to define a new module. In the `modules` array, add an entry like the following:
+In order to deploy the packed version of the application, run `rake deploy` from your terminal. Make sure to edit `Rakefile` to define the deployment location (we deploy using SSH, at the moment).
 
-```javascript
-		{
-			'name': 'routes/generic',
-			'exclude': ['main']
-		}
-```
-
-The `'name'` value is the file path of the route file relative to the `assets/javascripts/` directory (leave off the `.js` extension).
+If you want to merely create a packed version of the app and deploy yourself, run `rake assets:pack` in the terminal.
