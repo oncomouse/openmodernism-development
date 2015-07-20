@@ -8,7 +8,7 @@ require 'dm-migrations'
 # List of files to skip:
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
-	/^public\/vendor\/(?!require)/, # Skip all vendor modules except require itself
+	/^public\/vendor\/(?!requirejs)/, # Skip all vendor modules except require itself
 	/javascripts\/(components|mixins|vendor|models|collections|views|utilities|jst.js|site.js|app.js|dispatcher.js|router.js)/, # Skip all written JavaScript except the routes/
 	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
 	/application\/asset_definitions/, # Don't need any of the asset-pack stuff (which doesn't work on Dreamhost, anyway)
@@ -81,16 +81,15 @@ namespace :assets do
 		config['modules'] = [
 			{
 				'name' => 'main'
-			},
-			{
-				'name' => 'routes/document',
-				'exclude' => ['main']
-			},
-			{
-				'name' => 'routes/documents',
-				'exclude' => ['main']
 			}
 		]
+		Dir.glob("assets/javascripts/routes/**/*.js").each do |route_file|
+			route_file.gsub!("assets/javascripts/","").gsub!(/\.js$/,"")
+			config['modules'].push({
+				'name' => route_file,
+				'excludes' => '[main]'
+			})
+		end
 		config['appDir'] = './assets'
 		config['dir'] = './public'
 		config['skipDirOptimize'] = true
