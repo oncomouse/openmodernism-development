@@ -13,6 +13,8 @@ DEPLOYMENT = {
 #require 'sinatra/assetpack/rake'
 require 'dm-migrations'
 
+require 'fileutils'
+
 # List of files to skip:
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
@@ -69,7 +71,7 @@ task :deploy => "assets:pack" do
 		end
 	end
 	# Keep the development server free of compiled resources:
-	system("rm -r public/*")
+	FileUtils.rm_r Dir.glob("public/*")
 end
 
 namespace :assets do
@@ -80,7 +82,7 @@ namespace :assets do
 		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy dir=public mainConfigFile=assets-clean_copy/javascripts/main.js")
 		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
-		system ('rm -r assets-clean_copy')
+		FileUtils.rm_r 'assets-clean_copy'
 	end
 	
 	task :clean_public do
@@ -93,8 +95,8 @@ namespace :assets do
 	end
 	
 	task :copy_requirejs do
-		system("mkdir -p public/vendor/requirejs")
-		system("cp assets/vendor/requirejs/require.js public/vendor/requirejs")
+		FileUtils.mkdir_p "public/vendor/requirejs"
+		FileUtils.cp "assets/vendor/requirejs/require.js", "public/vendor/requirejs"
 	end
 	
 	task :make_app_build_js do
@@ -117,7 +119,6 @@ namespace :assets do
 		config['skipDirOptimize'] = true
 		config['optimize'] = 'none'
 		File.open('app.build.js', 'w') do |json_fp|
-			#json_fp.write("{\"dir\": \"./public\",")
 			json_fp.write(JSON.pretty_generate(config))#.gsub(/^\{/,""))
 		end
 	end
@@ -125,12 +126,12 @@ namespace :assets do
 	task :compile_react do
 		require 'babel/transpiler'
 		puts "Running task assets:compile_react"
-		#system "mkdir -p assets-clean_copy/javascripts/components/"
+		#FileUtils.mkdir_p "assets-clean_copy/javascripts/components/"
 		Dir.glob('assets/react/**/*.js').each do |react_file|
 			new_file = react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/')
 			puts new_file
 			if not File.exists? File.dirname(new_file)
-				system "mkdir -p #{File.dirname(new_file)}"
+				FileUtils.mkdir_p "#{File.dirname(new_file)}"
 			end
 			File.open(new_file, 'w') do |fp|
 				fp.write Babel::Transpiler.transform(File.read(react_file))['code'].gsub(/\\n/,"\n").gsub(/\\t/,"\t")
@@ -161,7 +162,7 @@ namespace :assets do
 			'/vendor/css3-mediaqueries-js/css3-mediaqueries.js',
 			'/vendor/html5shiv/dist/html5shiv.js'
 		]
-		system "mkdir -p assets-clean_copy/javascripts"
+		FileUtils.mkdir_p "assets-clean_copy/javascripts"
 		File.open('assets-clean_copy/javascripts/polyfill.js', 'w') do |poly_fp|
 			polyfill.each do |p|
 				poly_fp.write(IO.read "assets/#{p}")
@@ -176,8 +177,7 @@ namespace :assets do
 		puts "Running task assets:clean_copy"
 		
 		# Create our copy:
-		Dir.mkdir('assets-clean_copy') if not Dir.exists? 'assets-clean_copy'
-		Dir.mkdir('assets-clean_copy/vendor/') if not Dir.exists? 'assets-clean_copy/vendor'
+		FileUtils.mkdir_p('assets-clean_copy/vendor/')
 		
 		# Read in the r.js build script:
 		requirejs_config = JSON.parse(IO.read('app.build.js').gsub(/^\(/,"").gsub(/\)$/,"").gsub(/\'/,"\""))
@@ -197,19 +197,19 @@ namespace :assets do
 			if required_files.include?("../" + file)
 				# If it's a JS file, copy it:
 				if File.exists? "assets/#{file}.js"
-					system("mkdir -p assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}")
-					system("cp #{"assets/#{file}.js"} assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}")
+					FileUtils.mkdir_p "assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}"
+					FileUtils.cp "#{"assets/#{file}.js"}", "assets-clean_copy/vendor/#{File.dirname("#{file}.js").sub(/^vendor\//,"")}"
 				end
 				# If it's a directory, copy it's contents:
 				if Dir.exists? "assets/#{file}"
-					system("mkdir -p assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
-					system("cp -r #{"assets/#{file}"}/* assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}")
+					FileUtils.mkdir_p "assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}"
+					FileUtils.cp_r Dir.glob("#{"assets/#{file}"}/*"), "assets-clean_copy/vendor/#{file.sub(/^vendor\//,"")}"
 				end
 			end
 		end
 		
 		# Copy over the javascripts directory:
-		system("cp -r assets/javascripts assets-clean_copy/")
+		FileUtils.cp_r "assets/javascripts", "assets-clean_copy/"
 	end
 	task :build_jst do 
 		puts "Running task assets:build_jst"
@@ -228,7 +228,7 @@ namespace :assets do
 	task :compile_css do
 		puts "Running task assets:compile_css"
 		compiled_css =  Dir.glob('assets/stylesheets/**/[^_]*.scss').map{ |x| File.basename(x).gsub(/\.(?:scss|sass)/,'.css') }
-		system("mkdir -p public/stylesheets")
+		FileUtils.mkdir_p "public/stylesheets"
 		compiled_css.each{ |file| File.unlink("public/stylesheets/#{file}") if File.exists? file }
 		puts "Running Compass:"
 		system("bundle exec compass compile -c compass.config.rb")
