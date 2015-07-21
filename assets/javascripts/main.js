@@ -18,7 +18,8 @@ var requirejs_configuration = {
 		'writedown': 'vendor/writedown/writedown',
 		'react': '../vendor/react/react-with-addons',
 		'postal': '../vendor/postal/lib/postal',
-		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics'
+		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics',
+		'has': 'vendor/has/has'
 	},
 	'shim': {
 		'lodash': {
