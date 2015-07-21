@@ -86,6 +86,7 @@ namespace :assets do
 	end
 	
 	task :clean_public do
+		puts "Running assets:clean_public"
 		Dir.glob('public/**/*').each do |file|
 			next if not EXCLUDES.collect{|x| !x.match(file).nil? }.include? true # Skip the good files.
 			File.delete(file) if not File.directory? file
@@ -95,8 +96,15 @@ namespace :assets do
 	end
 	
 	task :copy_requirejs do
+		require 'uglifier'
 		FileUtils.mkdir_p "public/vendor/requirejs"
-		FileUtils.cp "assets/vendor/requirejs/require.js", "public/vendor/requirejs"
+		#FileUtils.cp "assets/vendor/requirejs/require.js", "public/vendor/requirejs"
+		
+		puts "Running assets:copy_requirejs"
+		compressed_source = Uglifier.compile(File.read("assets/vendor/requirejs/require.js"))
+		File.open("public/vendor/requirejs/require.js", "w") do |fp|
+			fp.write compressed_source
+		end
 	end
 	
 	task :make_app_build_js do
