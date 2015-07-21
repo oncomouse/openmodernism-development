@@ -30,6 +30,8 @@ gem 'uglifier', :group => [:development]
 gem 'therubyracer', :group => [:development]
 gem 'babel-transpiler', :group => [:development]
 
+gem 'rake', :group => [:development]
+
 gem 'dm-sqlite-adapter'#, :group => [:development, :test]
 #gem 'dm-mysql-adapter', :group => :production
 
