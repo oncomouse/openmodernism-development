@@ -36,12 +36,17 @@ define([
 			app.router = new Router({routes: app.routes, context: app});
 			
 			// Attach screen size tests:
-			$('body').append(_.map(['xs','sm','md','lg'], function(size) { 
-				//add the test to has.js:
-				has.add('screen-' + size, function() { return $('body > .visible-'+size+'-block').css('display') === 'block';});
-				
-				return '<div class="visible-'+size+'-block"></div>'; // Add the element
-			}).join(''));
+			_.each(['xs','sm','md','lg'], function(size) { 
+				has.add('screen-' + size, function() { 
+					var ret,new_el;
+
+					new_el = $('<div class="visible-' + size + '-block"></div>');
+					$('body').append(new_el);
+					ret = new_el.css('display') === 'block';
+					new_el.remove();
+					return ret;
+				});
+			});
 			
 			has.add('screen-xs-up', function() { return true; });
 			has.add('screen-sm-up', function() { return has('screen-sm') || has('screen-md') || has('screen-lg'); });
