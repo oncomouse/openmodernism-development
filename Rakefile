@@ -103,7 +103,7 @@ namespace :assets do
 		puts "Running assets:copy_requirejs"
 		compressed_source = Uglifier.compile(File.read("assets/vendor/requirejs/require.js"))
 		File.open("public/vendor/requirejs/require.js", "w") do |fp|
-			fp.write compressed_source
+			fp.write compressed_source.gsub(/\/\*.*?\*\//m,"")
 		end
 	end
 	
@@ -157,7 +157,7 @@ namespace :assets do
 			puts "Uglifying #{file}"
 			compressed_source = Uglifier.compile(File.read(file))
 			File.open(file, 'w') do |f_pointer|
-				f_pointer.write(compressed_source)
+				f_pointer.write(compressed_source.gsub(/\/\*.*?\*\//m,""))
 			end
 		end
 	end
