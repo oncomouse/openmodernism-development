@@ -89,8 +89,7 @@ namespace :assets do
 			File.delete(file) if not File.directory? file
 		end
 		
-		# Fix this:
-		Dir.glob("public/**/*").select{ |d| File.directory? d}.select{ |d| (Dir.entries(d) - %w[.. .]).empty?}.each{ |d| Dir.rmdir d }
+		Dir.glob("public/**/*").select{ |d| File.directory? d}.sort{ |a,b| b.count('/') <=> a.count('/') }.each{ |d| Dir.rmdir(d) if (Dir.entries(d) - %w[.. .]).empty?}
 	end
 	
 	task :copy_requirejs do
