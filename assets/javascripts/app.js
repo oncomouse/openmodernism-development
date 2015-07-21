@@ -4,7 +4,6 @@ define([
 	'jquery',
 	'lodash',
 	'backbone',
-	'lorem',
 	'router',
 	'bootstrap/transition',
 	'bootstrap/collapse'
@@ -12,7 +11,6 @@ define([
 	$,
 	_,
 	Backbone,
-	Lorem,
 	Router
 ){
 	var start = function() {
