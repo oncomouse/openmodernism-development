@@ -1,25 +1,21 @@
 define([
 	'lodash',
 	'react',
-	'mixins/publish-component-mount/PublishComponentMountMixin',
-	'components/sidebar/routes/documents',
-	'components/sidebar/routes/anthologies'
+	'mixins/publish-component-mount/PublishComponentMountMixin'
 ], function (
 	_,
 	React,
-	PublishComponentMountMixin,
-	SidebarDocuments,
-	SidebarAnthologies
+	PublishComponentMountMixin
 ) {
 	var Sidebar = React.createClass({
 		mixins: [
 			React.addons.PureRenderMixin,
 			PublishComponentMountMixin
 		],
-		routes: {
-			'documents': SidebarDocuments,
-			'anthologies': SidebarAnthologies
-		},
+		routes: [
+			'documents',
+			'anthologies'
+		],
 		getDefaultProps: function() {
 			return {
 				cols: 5,
@@ -30,11 +26,16 @@ define([
 		renderSidebar: function() {
 			var output;
 			
-			if(_.has(this.routes, this.props.route)) {
-				output = React.createElement(this.routes[this.props.route], this.props);
+			if(_.includes(this.routes, this.props.route)) {
+				require(['react', 'components/sidebar/routes/' + this.props.route], _.bind(function(React, ReactComponent) {
+					React.render(
+						React.createElement(ReactComponent, this),
+						$('.sidebar-body .sidebar-mountpoint').get(0)
+					);
+				}, this.props));
 			}
 			
-			return output;
+			return (<div className="sidebar-mountpoint" />);
 		},
 		render: function() {
 			return (
