@@ -126,7 +126,6 @@ namespace :assets do
 	task :compile_react do
 		require 'babel/transpiler'
 		puts "Running task assets:compile_react"
-		#FileUtils.mkdir_p "assets-clean_copy/javascripts/components/"
 		Dir.glob('assets/react/**/*.js').each do |react_file|
 			new_file = react_file.gsub('assets/react/', 'assets-clean_copy/javascripts/')
 			puts new_file
@@ -226,11 +225,22 @@ namespace :assets do
 		end
 	end
 	task :compile_css do
+		require 'compass'
+		require 'compass/sass_compiler'
 		puts "Running task assets:compile_css"
 		compiled_css =  Dir.glob('assets/stylesheets/**/[^_]*.scss').map{ |x| File.basename(x).gsub(/\.(?:scss|sass)/,'.css') }
 		FileUtils.mkdir_p "public/stylesheets"
 		compiled_css.each{ |file| File.unlink("public/stylesheets/#{file}") if File.exists? file }
 		puts "Running Compass:"
-		system("bundle exec compass compile -c compass.config.rb")
+		Compass.add_configuration({
+			:http_path => "/",
+			:additional_import_paths => ["assets/vendor/"],
+			:css_dir => "public/stylesheets",
+			:sass_dir => "assets/stylesheets",
+			:output_style => :compressed,
+			:line_comments => false
+			
+		}, "compass")
+		Compass.sass_compiler.compile!
 	end
 end
