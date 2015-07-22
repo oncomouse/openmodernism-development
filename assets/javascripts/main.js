@@ -19,6 +19,7 @@ var requirejs_configuration = {
 		'react': '../vendor/react/react-with-addons',
 		'postal': '../vendor/postal/lib/postal',
 		'postal.diagnostics': '../vendor/postal.diagnostics/lib/postal.diagnostics',
+		'postal.request-response': '../vendor/postal.request-response/lib/postal.request-response',
 		'has': 'vendor/has/has'
 	},
 	'shim': {

@@ -35,15 +35,13 @@ define([
 			// Generate the router:
 			app.router = new Router({routes: app.routes, context: app});
 			
-			// Attach screen size tests:
+			// Attach screen size tests (they depend on jQuery):
 			_.each(['xs','sm','md','lg'], function(size) { 
 				has.add('screen-' + size, function() { 
-					var ret,new_el;
+					var ret;
 
-					new_el = $('<div class="visible-' + size + '-block"></div>');
-					$('body').append(new_el);
-					ret = new_el.css('display') === 'block';
-					new_el.remove();
+					ret = ($('<div class="visible-'+size+'-block"></div>')).appendTo('body').css('display') === 'block';
+					$('body > .visible-'+size+'-block').remove();
 					return ret;
 				});
 			});
