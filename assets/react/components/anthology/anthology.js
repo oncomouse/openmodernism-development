@@ -3,7 +3,7 @@ define([
 	'lodash',
 	'react',
 	'mixins/publish-component-mount/PublishComponentMountMixin',
-	'mixins/request-response-mixin/RequestResponseMixin',
+	'mixins/login-dependent/LoginDependentMixin',
 	'components/document/short_view',
 	'jquery-ui/sortable',
 	'postal.request-response'
@@ -12,13 +12,12 @@ define([
 	_,
 	React,
 	PublishComponentMountMixin,
-	RequestResponseMixin,
+	LoginDependentMixin,
 	DocumentShortView
 ) {
 	var Anthology = React.createClass({
 		mixins: [
-			PublishComponentMountMixin,
-			RequestResponseMixin
+			PublishComponentMountMixin
 		],
 		propTypes: {
 			model: function(props, propName, componentName) { return (_.has(props, propName) && typeof props[propName].get === 'function' && typeof props[propName].set === 'function'); } /* Best we can do to check that model is a Backbone Model */
@@ -56,15 +55,12 @@ define([
 	});
 	
 	var AnthologyEditButton = React.createClass({
+		mixins: [
+			React.addons.PureRenderMixin,
+			LoginDependentMixin
+		],
 		getInitialState: function() {
-			this.channel = {};
-			this.channel['login'] = postal.channel('login');
 			this.channel['component'] = postal.channel('component');
-			this.channel['login'].subscribe('change', _.bind(function(data, envelope) {
-				if (this.isMounted()){
-					this.render();
-				}
-			}, this));
 			return null;
 		},
 		toggleEdit: function(ev) {
@@ -85,24 +81,18 @@ define([
 			this.channel['component'].publish('anthology:update_sortable', {});
 		},
 		render: function() {
-			this.channel['login'].request({topic: 'authenticated?'}).then(_.bind(function(data) {
-				if(data.authenticated) {
-					React.render(
-						<a class="btn btn-default btn-lg" id="anthology-edit" href="#">Edit This Anthology</a>, 
-					$('#AnthologyEditButton').get(0));
-					$('#AnthologyEditButton a').on('click', _.bind(this.toggleEdit, this));
-				} else {
-					$('#AnthologyEditButton a').off('click');
-					React.render(
-						<span></span>,
-						('#AnthologyEditButton').get(0)
-					);
-				}
-			}, this));
+			var content;
+			if(this.state.loginStatus) {
+				content = (
+					<a class="btn btn-default btn-lg" id="anthology-edit" href="#">Edit This Anthology</a>, 
+				);
+				$('#AnthologyEditButton a').on('click', _.bind(this.toggleEdit, this));
+			} else {
+				$('#AnthologyEditButton a').off('click');
+				content = (<span></span>);
+			}
 			
-			return(
-				<span id="AnthologyEditButton"></span>
-			)
+			return content;
 		}
 	});
 	

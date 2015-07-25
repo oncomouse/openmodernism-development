@@ -5,7 +5,7 @@ define([
 	'postal',
 	'mixins/route-architecture/RouteArchitectureMixin',
 	'mixins/publish-component-mount/PublishComponentMountMixin',
-	'mixins/request-response-mixin/RequestResponseMixin',
+	'mixins/login-dependent/LoginDependentMixin',
 	'postal.request-response'
 ], function(
 	$,
@@ -14,34 +14,20 @@ define([
 	postal,
 	RouteArchitectureMixin,
 	PublishComponentMountMixin,
-	RequestResponseMixin
+	LoginDependentMixin
 ) {
 	var LoginLink = React.createClass({
 		mixins: [
 			React.addons.PureRenderMixin,
 			RouteArchitectureMixin,
 			PublishComponentMountMixin,
-			RequestResponseMixin
+			LoginDependentMixin
 		],
-		getInitialState: function() {
-			this.channel['login'] = postal.channel('login');
-			this.channel['login'].subscribe('change', _.bind(function(data, envelope) {
-				if (this.isMounted()){
-					this.setState({loginStatus: payload.loginStatus});
-				}
-			}, this));
-			return {
-				loginStatus: false
-			}
-		},
 		mountComponent: function() {
 			React.render(
 				<LoginLink />,
 				$('nav .collapse ul.navbar-right').get(0)
 			);
-			this.channel['login'].request({topic: 'authenticated?'}).then(_.bind(function(data) {
-				this.setState({loginStatus: data.authenticated});
-			}, this));
 		},
 		clickLogin: function(ev) {
 			ev.stopPropagation();

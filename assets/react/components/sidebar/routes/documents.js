@@ -1,16 +1,39 @@
 define([
-	'react'
+	'lodash',
+	'jquery',
+	'react',
+	'postal',
+	'mixins/login-dependent/LoginDependentMixin',
+	'postal.request-response'
 ], function(
-	React
+	_,
+	$,
+	React,
+	postal,
+	LoginDependentMixin
 ) {
 	var SidebarDocuments = React.createClass({
 		mixins: [
-			React.addons.PureRenderMixin
+			React.addons.PureRenderMixin,
+			LoginDependentMixin
 		],
+		getInitialState: function() {
+			this.channel['component'] = postal.channel('component');
+			return null;
+		},
 		render: function() {
-			return (
-				<p>Foobar</p>
-			);
+			var content;
+			if(this.state.loginStatus) {
+				content = (
+					<p>Logged In</p>
+				);
+			} else {
+				content = (
+					<p>Foobar</p>
+				);
+			}
+			
+			return content;
 		}
 	});
 	
