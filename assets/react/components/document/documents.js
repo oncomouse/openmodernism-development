@@ -35,8 +35,8 @@ define([
 	var DocumentList = React.createClass({
 		createChildren: function() {
 			return _.map(this.props.collection.models, function (element) {
-					return React.createElement(DocumentShortView, {model: element, key: JSON.stringify(element)});
-				});
+				return (<DocumentShortView model={element} key={JSON.stringify(element)}/>);
+			});
 		},
 		render: function() {
 			return (

@@ -34,7 +34,7 @@ define([
 		},
 		render: function() {
 			var renderedChildren = 	_.map(this.props.model.documents, function (element) {
-				return React.createElement(DocumentShortView, {model: element, key: JSON.stringify(element)});
+				return (<DocumentShortView model={element} key={JSON.stringify(element)}/>);
 			});
 			return(
 				<div className="row">
