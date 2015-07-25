@@ -2,12 +2,14 @@ define([
 	'lodash',
 	'react',
 	'mixins/publish-component-mount/PublishComponentMountMixin',
-	'components/sidebar/sidebar'
+	'components/sidebar/sidebar',
+	'components/document/short_view.js'
 ], function(
 	_,
 	React,
 	PublishComponentMountMixin,
-	Sidebar
+	Sidebar,
+	DocumentShortView
 ) {
 	var Documents = React.createClass({
 		mixins: [
@@ -42,16 +44,6 @@ define([
 					{this.createChildren()}
 				</ul>
 			)
-		}
-	});
-	
-	var DocumentShortView = React.createClass({
-		render: function() {
-			return(
-				<li>
-					<a href={ '#/document/' + this.props.model.id } dangerouslySetInnerHTML={{ __html: this.props.model.get('metadata').to_s() }} />
-				</li>
-			);
 		}
 	});
 	
