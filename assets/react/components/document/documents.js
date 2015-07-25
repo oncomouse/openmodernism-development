@@ -3,7 +3,7 @@ define([
 	'react',
 	'mixins/publish-component-mount/PublishComponentMountMixin',
 	'components/sidebar/sidebar',
-	'components/document/short_view.js'
+	'components/document/short_view'
 ], function(
 	_,
 	React,
