@@ -1,10 +1,13 @@
 'use strict';
 
 define([
+	'jquery',
 	'postal',
 	'components/login/login_link',
-	'components/login/login_modal'
+	'components/login/login_modal',
+	'postal.request-response'
 ], function(
+	$,
 	postal,
 	LoginLinkComponent,
 	LoginModalComponent
@@ -22,11 +25,16 @@ define([
 			this.channel['login'].subscribe('submit', _.bind(function(data, envelope) {
 				this.form_submit(data.formType, data.event);
 			}, this));
-			this.channel['component'].subscribe('register', _.bind(function(data, envelope) {
+			
+			this.channel['login'].subscribe('authenticated?', _.bind(function(data,envelope) {
+				envelope.reply(null, {authenticated: this.authenticated()})
+			}, this));
+			
+			/*this.channel['component'].subscribe('register', _.bind(function(data, envelope) {
 				if(data.component == 'LoginLink') {
 					this.authenticate();
 				}
-			},this));
+			},this));*/
 			
 			this.authenticate();
 			
@@ -34,7 +42,7 @@ define([
 		authenticate: function() {
 			this.channel['login'].publish('change', {loginStatus: false});
 		},
-		authentication_status: function() {
+		authenticated: function() {
 			return false;
 		},
 		form_submit: function(form_type, ev) {
@@ -55,9 +63,6 @@ define([
 			// Some kind of AJAX call:
 			this.channel['login'].publish('submitted');
 		},
-		authenticated: function() {
-			return false;
-		}
 	});
 	
 	return LoginManager;
