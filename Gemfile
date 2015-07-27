@@ -24,6 +24,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-openid'
 
 gem 'sshkit', :group => [:development]
+gem 'highline', :group => [:development]
 
 gem 'shotgun', :group => [:development, :test]
 gem 'uglifier', :group => [:development]
