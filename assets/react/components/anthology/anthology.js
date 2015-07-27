@@ -84,7 +84,7 @@ define([
 			var content;
 			if(this.state.loginStatus) {
 				content = (
-					<a class="btn btn-default btn-lg" id="anthology-edit" href="#">Edit This Anthology</a>, 
+					<a class="btn btn-default btn-lg" id="anthology-edit" href="#">Edit This Anthology</a>
 				);
 				$('#AnthologyEditButton a').on('click', _.bind(this.toggleEdit, this));
 			} else {
