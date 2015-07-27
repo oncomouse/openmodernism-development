@@ -157,7 +157,7 @@ namespace :assets do
 			puts "Uglifying #{file}"
 			compressed_source = Uglifier.compile(File.read(file))
 			File.open(file, 'w') do |f_pointer|
-				f_pointer.write(compressed_source.gsub(/\/\*.*?\*\//m,""))
+				f_pointer.write(compressed_source) #.gsub(/\/\*.*?\*\//m,"")
 			end
 		end
 	end
