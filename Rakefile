@@ -18,6 +18,7 @@ require 'fileutils'
 # List of files to skip:
 EXCLUDES = [
 	/^assets\//, # Don't upload uncompiled assets
+  /node_modules/, # NEVER
 	/^public\/vendor\/(?!requirejs)/, # Skip all vendor modules except require itself
 	/javascripts\/(components|mixins|vendor|models|collections|views|utilities|jst.js|site.js|app.js|dispatcher.js|router.js)/, # Skip all written JavaScript except the routes/
 	/[A-Z][a-z]+file/, # Don't need Rakefile or Gemfile (or a Capfile, if it exists)
