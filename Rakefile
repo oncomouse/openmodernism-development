@@ -119,7 +119,7 @@ namespace :assets do
 			route_file.gsub!("assets/javascripts/","").gsub!(/\.js$/,"")
 			config['modules'].push({
 				'name' => route_file,
-				'excludes' => '[main]'
+				'exclude' => ['main']
 			})
 		end
 		config['appDir'] = './assets'
