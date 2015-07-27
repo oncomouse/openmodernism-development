@@ -84,7 +84,8 @@ namespace :assets do
 		puts "Running task assets:run_r_js"
 		system("node assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy dir=public mainConfigFile=assets-clean_copy/javascripts/main.js")
 		#system("java -classpath /Users/andrew/Downloads/js.jar:/Users/andrew/Desktop/Software/goog/closure-compiler/build/compiler.jar org.mozilla.javascript.tools.shell.Main assets/vendor/r.js/dist/r.js -o app.build.js appDir=assets-clean_copy mainConfigFile=assets-clean_copy/javascripts/main.js")
-		FileUtils.rm_r 'assets-clean_copy'
+		FileUtils.rm_r "assets-clean_copy"
+		FileUtils.rm "app.build.js"
 	end
 	
 	task :clean_public do
