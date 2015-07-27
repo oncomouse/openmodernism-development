@@ -27,6 +27,7 @@ EXCLUDES = [
 	/app\.build\.js/, # Don't upload build files
 	/README\.md/,
 	/build\.txt/,
+	/bower.json/,
 	/jsx_support.rb/,
 	/\.jst\.tpl/, # We don't need to pass in the .jst.tpl files, as they are already built by JST.js
 	/development\.sqlite/, # Don't upload the development DB file
@@ -118,10 +119,14 @@ namespace :assets do
 		]
 		Dir.glob("assets/javascripts/routes/**/*.js").each do |route_file|
 			route_file.gsub!("assets/javascripts/","").gsub!(/\.js$/,"")
-			config['modules'].push({
+			module_json = {
 				'name' => route_file,
 				'exclude' => ['main']
-			})
+			}
+			if File.exist? "assets/react/components/sidebar/" + route_file + ".js"
+				module_json["include"] = [ "components/sidebar/" + route_file ]
+			end
+			config['modules'].push(module_json)
 		end
 		config['appDir'] = './assets'
 		config['dir'] = './public'
