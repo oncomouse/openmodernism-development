@@ -4,6 +4,7 @@ public/stylesheets
 public/build.txt
 application/auth
 assets/vendor
+node_modules/
 log
 .sass-cache
 .DS_Store
